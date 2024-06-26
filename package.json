@@ -24,7 +24,7 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "NODE_ENV=test jest",
     "clean": "rimraf ./examples/output",
-    "example": "npm run clean && npm run build && node ./examples/normal"
+    "example": "npm run clean && npm run build && node ./examples/simple"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
