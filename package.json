@@ -1,0 +1,66 @@
+{
+  "name": "ffaivideo",
+  "version": "1.0.2",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Anonymous",
+  "license": "MIT",
+  "keywords": [],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drawcall/FFAIVideo.git"
+  },
+  "homepage": "https://github.com/drawcall/FFAIVideo",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint -p tsconfig.json -c tslint.json",
+    "typecheck": "eslint --ext .ts --ext .js src",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "test": "NODE_ENV=test jest",
+    "clean": "rm -rf ./examples/output",
+    "example": "npm run clean && npm run build && node ./examples/normal"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
+    "@google/generative-ai": "^0.7.0",
+    "axios": "^0.21.4",
+    "azure-openai": "^0.9.4",
+    "edge-tts-node": "^1.2.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs-extra": "^11.2.0",
+    "g4f": "^1.4.3",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "openai": "^4.37.1",
+    "rimraf": "^5.0.7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jsonfile": "^6.1.4",
+    "@types/lodash": "^4.17.5",
+    "@types/md5": "^2.3.5",
+    "@types/node-fetch": "^2.6.11",
+    "@types/signale": "^1.4.7",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "typescript": "^5.4.5"
+  }
+}
