@@ -1,8 +1,8 @@
-<p style="text-align: center;">  
+<p align="center">  
   <img src="./logo.png" alt="Logo" style="width:380px;">  
 </p>
 
-<p style="text-align: center;"> 
+<p align="center"> 
 A node.js framework that generates short videos using popular AI LLM.
 </p>
 

@@ -21,9 +21,9 @@
   "scripts": {
     "lint": "eslint -p tsconfig.json -c tslint.json",
     "typecheck": "eslint --ext .ts --ext .js src",
-    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "NODE_ENV=test jest",
-    "clean": "rm -rf ./examples/output",
+    "clean": "rimraf ./examples/output",
     "example": "npm run clean && npm run build && node ./examples/normal"
   },
   "dependencies": {
@@ -39,7 +39,6 @@
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "openai": "^4.37.1",
-    "rimraf": "^5.0.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -61,6 +60,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "rimraf": "^5.0.7",
     "typescript": "^5.4.5"
   }
 }
