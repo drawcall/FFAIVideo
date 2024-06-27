@@ -2,8 +2,11 @@ const { generateVideo, Logger } = require('../dist');
 const path = require('path');
 
 Logger.enabled = true;
+console.log('Before running the example, please make sure to apply for and obtain the relevant API keys required.');
 generateVideo(
   {
+    // Get your API key at https://platform.openai.com/api-keys
+    // Or Visit https://platform.moonshot.cn/console/api-keys to get your API key.
     // provider: 'moonshot',
     // moonshot: {
     //   apiKey: 'xxxxxxxx',
