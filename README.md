@@ -3,11 +3,11 @@
 </p>
 
 <p align="center"> 
-A node.js framework that generates short videos using popular AI LLM.
+A node.js project that generates short videos using popular AI LLM.
 </p>
 
 ## FFAIVideo
-A lightweight node.js framework that utilizes the currently popular AI LLM in the industry to intelligently generate short videos. Without the need for complex configurations, simply input a short piece of text, and it can automatically synthesize an exciting video content.
+A lightweight node.js project that utilizes the currently popular AI LLM in the industry to intelligently generate short videos. Without the need for complex configurations, simply input a short piece of text, and it can automatically synthesize an exciting video content.
 
 ## Features
 - Fully developed on Node.js, enabling quick mastery by front-end developers.  
