@@ -21,6 +21,7 @@ generateVideo(
     bgMusic: path.join(__dirname, './assets/songs/m2.mp3'),
     output: path.join(__dirname, './output'),
     pexels: {
+      // Register at https://www.pexels.com/api/ to get your API key.
       apiKey: 'Pexels API Key',
     },
     videoScript: `意大利，这个位于欧洲南部的国家，以其丰富的历史、文化和美食而闻名于世。古罗马帝国的辉煌在这里留下了深刻的印记，古罗马竞技场、斗兽场和无数历史遗迹都诉说着过去的荣耀。这里还是文艺复兴的发源地，佛罗伦萨、威尼斯、罗马等城市充满了艺术的气息，无数大师的作品令人叹为观止。
