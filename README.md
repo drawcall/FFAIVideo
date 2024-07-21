@@ -31,12 +31,14 @@ const { generateVideo } = require('ffaivideo');
 
 generateVideo(
   {
-    provider: 'openai',
-    openai: {
-      apiKey: 'xxx',
-      modelName: 'xxx',
-      baseUrl: 'xxx',
-    },
+    provider: 'g4f',
+    // Use the free g4f, or OpenAI, or Moonshot account
+    // provider: 'openai',
+    // openai: {
+    //   apiKey: 'xxx',
+    //   modelName: 'xxx',
+    //   baseUrl: 'xxx',
+    // },
     termsNum: 8,
     subtitleMaxWidth: 9,
     videoClipDuration: 12,
