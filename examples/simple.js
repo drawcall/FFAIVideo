@@ -12,7 +12,7 @@ generateVideo(
     output: path.join(__dirname, './output'),
     pexels: {
       // Register at https://www.pexels.com/api/ to get your API key.
-      apiKey: 'AkSBH49b2Vn0VN6aK8FrFxP0w9OoWbUT8rve68jArgGAWQHCs2GVPd1u',
+      apiKey: 'cuXVffUOm1A5ZSkvdrhJVd4wsgqgelD8EBOsgFNe8koKkGoncRJuE9z2',
     },
     videoScript: `法国大餐，作为一种世界闻名的烹饪艺术，以其精致的摆盘、丰富的口感和深厚的文化底蕴，吸引着无数食客。
 
