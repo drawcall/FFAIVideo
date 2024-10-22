@@ -1,6 +1,6 @@
 {
   "name": "ffaivideo",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,7 +32,7 @@
     "@google/generative-ai": "^0.7.0",
     "axios": "^0.21.4",
     "azure-openai": "^0.9.4",
-    "edge-tts-node": "^1.2.1",
+    "edge-tts-node": "^1.5.1",
     "fluent-ffmpeg": "^2.1.3",
     "fs-extra": "^11.2.0",
     "g4f": "^1.4.3",
