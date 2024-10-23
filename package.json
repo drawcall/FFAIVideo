@@ -1,6 +1,6 @@
 {
   "name": "ffaivideo",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "eslint -p tsconfig.json -c tslint.json",
+    "lint": "eslint . --ext .ts,.tsx -c .eslintrc.js",
     "typecheck": "eslint --ext .ts --ext .js src",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "NODE_ENV=test jest",

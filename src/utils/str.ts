@@ -17,9 +17,9 @@ const matchStr = (line: string, subLine: string): boolean => {
     return true;
   }
 
-  const subLine_ = removeSpecialCharacters(subLine);
-  const line_ = removeSpecialCharacters(line);
-  if (subLine_ === line_) {
+  const cleanedSubLine = removeSpecialCharacters(subLine);
+  const cleanedLine = removeSpecialCharacters(line);
+  if (cleanedSubLine === cleanedLine) {
     return true;
   }
 
@@ -40,10 +40,10 @@ const getMatchLineStr = (
     return scriptLines[subIndex].trim();
   }
 
-  const subLine_ = removeSpecialCharacters(subLine);
-  const line_ = removeSpecialCharacters(line);
-  if (subLine_ === line_) {
-    return line_;
+  const cleanedSubLine = removeSpecialCharacters(subLine);
+  const cleanedLine = removeSpecialCharacters(line);
+  if (cleanedSubLine === cleanedLine) {
+    return cleanedLine;
   }
 
   return '';

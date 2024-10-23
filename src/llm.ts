@@ -1,5 +1,6 @@
 import { G4F } from 'g4f';
 import OpenAI from 'openai';
+import axios from 'axios';
 import { OpenAIApi as AzureOpenAIApi, Configuration } from 'azure-openai';
 import {
   GoogleGenerativeAI,
@@ -147,6 +148,23 @@ const generateResponse = async (
     });
     content = response.data.choices[0].text!.trim();
     return content;
+  }
+
+  if (provider === 'custom' && llmConfig.custom) {
+    try {
+      const response = await axios.post(
+        llmConfig.custom.url,
+        llmConfig.custom.data,
+        llmConfig.custom.requestConfig,
+      );
+      if (response && response.data) {
+        content = response.data.choices[0]?.message?.content || '';
+      }
+      return content;
+    } catch (error) {
+      console.error('Error making custom API call:', error);
+      throw error;
+    }
   }
 
   Logger.log(provider, JSON.stringify(llmConfig));

@@ -1,1 +1,6 @@
 config
+node_modules/
+examples/*
+test/*
+*.d.ts
+*.md

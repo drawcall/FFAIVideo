@@ -1,8 +1,15 @@
+interface CustomConfig {
+  url: string;
+  data: any;
+  requestConfig?: any;
+}
+
 interface LLMConfig {
   apiKey: string;
   modelName: string;
   baseUrl?: string;
   apiVersion?: string;
+  custom?: CustomConfig;
 }
 
 const defaultLLMConfig: {

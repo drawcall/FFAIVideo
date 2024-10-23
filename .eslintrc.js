@@ -4,6 +4,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
+  ignorePatterns: ['test/*', '*.d.ts'],
   plugins: ['@typescript-eslint', 'simple-import-sort', 'import', 'prettier'],
   extends: [
     'eslint:recommended',
@@ -15,6 +16,8 @@ module.exports = {
   rules: {
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/prefer-default-export': 'off',
     'lines-between-class-members': 'off',
     'import/no-extraneous-dependencies': 'off',
@@ -23,5 +26,6 @@ module.exports = {
     'max-classes-per-file': 'off',
     '@typescript-eslint/indent': 'off',
     'import/no-cycle': 'off',
+    'prefer-const': 'off'
   },
 };
