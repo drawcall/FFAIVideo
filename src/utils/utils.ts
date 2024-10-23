@@ -56,10 +56,11 @@ const getEnumKeyByValue = <T extends string>(
   throw new Error(`No key found for value: ${value}`);
 };
 
-const uuid = (removeHyphen: boolean = false): string => {
+const uuid = (length: number = -1): string => {
   let u = uuidv4();
-  if (removeHyphen) {
-    u = u.replace(/-/g, '');
+  u = u.replace(/-/g, '');
+  if (length > 0) {
+    u = u.slice(0, length);
   }
   return u;
 };

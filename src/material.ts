@@ -1,5 +1,7 @@
 import fs from 'fs-extra';
 import md5 from 'md5';
+import path from 'path';
+import axios from 'axios';
 import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
 import { toResolution } from './utils/video-aspect';
@@ -9,6 +11,7 @@ import { appequal } from './utils/utils';
 import { httpGet } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
+import { uuid } from './utils/utils';
 
 interface MaterialInfo {
   provider: string;
@@ -141,4 +144,43 @@ const downloadVideos = async (
   return videoPaths;
 };
 
-export { downloadVideos };
+const copyClipToCache = async (
+  clipPath: string,
+  cacheDir: string,
+): Promise<{ videoId: string; newPath: string }> => {
+  const videoId = `vid-${uuid().substring(0, 8)}`;
+  const newPath = path.join(cacheDir, videoId);
+  const isUrl = /^https?:\/\//.test(clipPath);
+
+  if (isUrl) {
+    try {
+      const response = await axios({
+        method: 'GET',
+        url: clipPath,
+        responseType: 'stream',
+      });
+
+      await fs.ensureDir(cacheDir);
+      const writer = fs.createWriteStream(newPath);
+      response.data.pipe(writer);
+      await new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+      });
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      throw error;
+    }
+  } else {
+    try {
+      await fs.copy(clipPath, newPath);
+    } catch (error) {
+      console.error('Error copying file:', error);
+      throw error;
+    }
+  }
+
+  return { videoId, newPath };
+};
+
+export { downloadVideos, copyClipToCache };

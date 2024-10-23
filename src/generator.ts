@@ -1,9 +1,10 @@
 import path from 'path';
 import fs from 'fs-extra';
+import { isEmpty, isArray } from 'lodash';
 import { progressFun, successFun } from './config/constant';
 import { VideoConfig, mergeConfig, createOutputConfig } from './config/config';
 import { generateTerms } from './llm';
-import { downloadVideos } from './material';
+import { downloadVideos, copyClipToCache } from './material';
 import { combineFinalVideo } from './video';
 import { fileToSubtitles } from './sub-maker';
 import {
@@ -39,7 +40,7 @@ const generateVideo = async (
   } else {
     if (typeof videoTerms === 'string') {
       videoTerms = videoTerms.split(/[,，]/).map(term => term.trim());
-    } else if (Array.isArray(videoTerms)) {
+    } else if (isArray(videoTerms)) {
       videoTerms = videoTerms.map(term => term.trim());
     } else {
       throw new Error('video_terms must be a string or an array of strings');
@@ -79,7 +80,7 @@ const generateVideo = async (
   }
   progress(40);
 
-  const downloadedVideos = await downloadVideos(
+  const downloadedVideos: string[] = await downloadVideos(
     videoTerms,
     videoDuration,
     cacheDir,
@@ -87,12 +88,32 @@ const generateVideo = async (
     progress,
   );
 
-  if (!downloadedVideos) {
+  if (isEmpty(downloadedVideos)) {
     Logger.error(
       'Failed to download videos, maybe the network is not available!',
     );
     return '';
+  } else {
+    if (params.insertClips && isArray(params.insertClips)) {
+      for (const clip of params.insertClips) {
+        try {
+          const { videoId, newPath } = await copyClipToCache(
+            clip.path,
+            cacheDir,
+          );
+          const insertPosition = clip.position || 0;
+          if (insertPosition >= downloadedVideos.length) {
+            downloadedVideos.push(newPath);
+          } else {
+            downloadedVideos.splice(insertPosition, 0, newPath);
+          }
+        } catch (error) {
+          console.error('Error processing insert clip:', error);
+        }
+      }
+    }
   }
+
   progress(85);
 
   // Combine and generate the final video
@@ -102,7 +123,7 @@ const generateVideo = async (
     subtitleFile,
     downloadedVideos, // Downloaded fragments
     config,
-    progress
+    progress,
   );
 
   if (removeCache) {

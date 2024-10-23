@@ -12,6 +12,12 @@ interface MaterialSite {
   enableProxy: boolean;
 }
 
+interface InsertClip {
+  keyword?: string;
+  path: string;
+  position: number;
+}
+
 interface VideoConfig {
   taskId?: string;
   provider?: string;
@@ -46,6 +52,7 @@ interface VideoConfig {
   lastTime?: number;
   removeCache?: boolean;
 
+  insertClips?: InsertClip[];
   [key: string]: any;
 }
 
