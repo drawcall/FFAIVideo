@@ -9,13 +9,13 @@ interface Metadata {
   width: number;
 }
 
-let _pathSetted = false;
+let isPathSet = false;
 const setFFPath = () => {
-  if (_pathSetted) return;
+  if (isPathSet) return;
   try {
     ffmpeg.setFfmpegPath(ffmpegInstaller.path);
     ffmpeg.setFfprobePath(ffprobeInstaller.path);
-    _pathSetted = true;
+    isPathSet = true;
   } catch (e) {
     Logger.log(e);
   }

@@ -12,6 +12,13 @@ const matchLine = (
   return matchStr(line, subLine);
 };
 
+const removeSpecialCharacters = (str: string) => {
+  const cnRegex =
+    /[，。！？、；：“”‘’（）《》【】〈〉「」『』【】〔〕〖〗〈〉《》「」『』【】〔〕【】﹝﹞（）［］｛｝＜＞﹤﹥「」『』【】＜＞《》「」『』【】]/g;
+  const enRegex = /[!"#$%&'()*+,\-./:;<=>?@\[\]^_`{|}~]/g;
+  return str.replace(cnRegex, '').replace(enRegex, '');
+};
+
 const matchStr = (line: string, subLine: string): boolean => {
   if (subLine === line) {
     return true;
@@ -47,13 +54,6 @@ const getMatchLineStr = (
   }
 
   return '';
-};
-
-const removeSpecialCharacters = (str: string) => {
-  const cnRegex =
-    /[，。！？、；：“”‘’（）《》【】〈〉「」『』【】〔〕〖〗〈〉《》「」『』【】〔〕【】﹝﹞（）［］｛｝＜＞﹤﹥「」『』【】＜＞《》「」『』【】]/g;
-  const enRegex = /[!"#$%&'()*+,\-./:;<=>?@\[\]^_`{|}~]/g;
-  return str.replace(cnRegex, '').replace(enRegex, '');
 };
 
 const replaceSpecialChar = (text: string): string => {
@@ -132,7 +132,7 @@ const splitArrayItemsBySign = (arr: string[], sign: string): string[] => {
     const item = arr[i];
     if (typeof item === 'string' && item.includes(sign)) {
       const parts = item.split(sign);
-      result.push(...parts.filter(part => part !== ''));  
+      result.push(...parts.filter(part => part !== ''));
     } else {
       result.push(item);
     }

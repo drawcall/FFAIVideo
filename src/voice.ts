@@ -67,15 +67,15 @@ const tts = async (
   text = text.trim();
   MsEdgeTTS.wordBoundaryEnabled = true;
   try {
-    let tts = new MsEdgeTTS(undefined, false);
-    await tts.setMetadata(
+    let edgeTTS = new MsEdgeTTS(undefined, false);
+    await edgeTTS.setMetadata(
       voiceName,
       MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
     );
     const subMaker = new SubMaker();
     //const file = fs.createWriteStream(voiceFile);
     await new Promise((resolve, reject) => {
-      tts
+      edgeTTS
         .toStream(text)
         .on('data', chunk => {
           const message = chunk.toString();
@@ -129,9 +129,9 @@ const generateSubtitle = async (
 
     for (let i = 0; i < subMaker.offset.length; i++) {
       let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
-      const [_startTime, endTime] = offset; // Assume offset is an array or tuple
+      const [initialStartTime, endTime] = offset; // Assume offset is an array or tuple
       if (startTime < 0) {
-        startTime = _startTime;
+        startTime = initialStartTime;
       }
 
       subLine += decodeURIComponent(sub);

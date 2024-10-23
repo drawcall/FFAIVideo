@@ -16,7 +16,7 @@ const combineFinalVideo = async (
   subtitleFile: string,
   downloadedVideos: string[],
   config: VideoConfig,
-  progress: Function,
+  progress: (progress: number) => void,
 ): Promise<string> => {
   setFFPath();
   const {
@@ -38,7 +38,7 @@ const combineFinalVideo = async (
     config,
   );
   progress(90);
-  
+
   let command = ffmpeg();
   let vfilter = '';
   clips.forEach((file, index) => {

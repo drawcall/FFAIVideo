@@ -17,7 +17,7 @@ import { Logger } from './utils/log';
 
 const generateVideo = async (
   params: VideoConfig,
-  progress: Function = progressFun,
+  progress: (progress: number) => void = progressFun,
 ): Promise<string> => {
   const config = createOutputConfig(mergeConfig(params));
   const voiceName = parseVoiceName(config.voiceName);
