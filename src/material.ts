@@ -100,7 +100,7 @@ const downloadVideos = async (
   videoDuration: number = 0.0,
   cacheDir: string,
   config: VideoConfig,
-  progress: Function,
+  progress: (progress: number) => void,
 ): Promise<string[]> => {
   const { videoClipDuration: maxClipDuration = 5 } = config;
   let validVideoItems: MaterialInfo[] = [];
