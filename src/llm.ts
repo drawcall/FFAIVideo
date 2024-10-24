@@ -32,6 +32,15 @@ const getLLMConfig = (config: VideoConfig): LLMConfig => {
     throw new Error('LLM provider is not set in the config file.');
   }
 
+  if (provider !== 'custom') {
+    const requiredFields = ['apiKey', 'modelName', 'baseUrl'] as const;
+    for (const field of requiredFields) {
+      if (!llmConfig[field]) {
+        throw new Error(`${provider}: ${field} is not set in the config file.`);
+      }
+    }
+  }
+
   return llmConfig;
 };
 
