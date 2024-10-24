@@ -150,12 +150,12 @@ const generateResponse = async (
     return content;
   }
 
-  if (provider === 'custom' && llmConfig.custom) {
+  if (provider === 'custom') {
     try {
       const response = await axios.post(
-        llmConfig.custom.url,
-        llmConfig.custom.data,
-        llmConfig.custom.requestConfig,
+        llmConfig.baseUrl ?? '',
+        llmConfig.data,
+        llmConfig.requestConfig,
       );
       if (response && response.data) {
         content = response.data.choices[0]?.message?.content || '';
