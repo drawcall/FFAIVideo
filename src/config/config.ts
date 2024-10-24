@@ -26,6 +26,7 @@ interface VideoConfig {
   azure?: LLMConfig;
   gemini?: LLMConfig;
   g4f?: LLMConfig;
+  customAI?: LLMConfig;
   pexels?: MaterialSite;
   videoScript?: string; // Script used to generate video
   videoTerms?: string | string[]; // Keywords used to generate video

@@ -11,51 +11,32 @@ import { VideoConfig, LLMConfig } from './config/config';
 import { Logger } from './utils/log';
 
 const getLLMConfig = (config: VideoConfig): LLMConfig => {
-  let llmConfig: LLMConfig = { ...config.defalut };
   const provider = config.provider!.toLowerCase();
+  let llmConfig: LLMConfig = { ...config.default };
 
-  switch (provider) {
-    case 'moonshot':
-      llmConfig = { ...llmConfig, ...config.moonshot };
-      break;
+  const providerConfigs: { [key: string]: LLMConfig | undefined } = {
+    moonshot: config.moonshot,
+    openai: config.openai,
+    azure: config.azure,
+    gemini: config.gemini,
+    g4f: config.g4f,
+    custom: config.customAI,
+  };
 
-    case 'openai':
-      llmConfig = { ...llmConfig, ...config.openai };
-      break;
-
-    case 'azure':
-      llmConfig = { ...llmConfig, ...config.azure };
-      break;
-
-    // google DeepMind
-    case 'gemini':
-      llmConfig = { ...llmConfig, ...config.gemini };
-      break;
-
-    case 'g4f':
-      llmConfig = { ...llmConfig, ...config.g4f };
-      break;
-
-    default:
-      throw new Error(
-        'llm provider is not set, please set it in the config file.',
-      );
+  if (provider in providerConfigs) {
+    const providerConfig = providerConfigs[provider];
+    if (providerConfig) {
+      llmConfig = { ...llmConfig, ...providerConfig };
+    }
+  } else {
+    throw new Error('LLM provider is not set in the config file.');
   }
 
-  if (llmConfig.apiKey == '') {
-    throw new Error(
-      `${provider}: api_key is not set, please set it in the config file.`,
-    );
-  }
-  if (llmConfig.modelName == '') {
-    throw new Error(
-      `${provider}: model_name is not set, please set it in the config file.`,
-    );
-  }
-  if (llmConfig.baseUrl == '') {
-    throw new Error(
-      `${provider}: base_url is not set, please set it in the config file.`,
-    );
+  const requiredFields = ['apiKey', 'modelName', 'baseUrl'] as const;
+  for (const field of requiredFields) {
+    if (!llmConfig[field]) {
+      throw new Error(`${provider}: ${field} is not set in the config file.`);
+    }
   }
 
   return llmConfig;
