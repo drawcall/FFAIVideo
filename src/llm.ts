@@ -136,16 +136,24 @@ const generateResponse = async (
 
   if (provider === 'custom') {
     try {
+      const data = { message: prompt, ...llmConfig.data };
       const response = await axios.post(
         llmConfig.baseUrl ?? '',
-        llmConfig.data,
+        data,
         llmConfig.requestConfig,
       );
-      
+
       if (response && response.data) {
-        const responsePath = llmConfig.responsePath || 'data.choices[0].message.content';
+        const responsePath =
+          llmConfig.responsePath || 'data.choices[0].message.content';
         content = get(response.data, responsePath, '');
-        Logger.log(provider, content);
+        Logger.log(
+          provider,
+          content,
+          '\n',
+          llmConfig.responsePath,
+          response.data,
+        );
       }
       return content;
     } catch (error) {
