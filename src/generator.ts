@@ -13,6 +13,7 @@ import {
   generateSubtitle,
   parseVoiceName,
 } from './voice';
+import { removeEmptyLines } from './utils/str';
 import { Logger } from './utils/log';
 
 const generateVideo = async (
@@ -31,6 +32,7 @@ const generateVideo = async (
     subtitleMaxWidth = 9999,
   } = config;
 
+  videoScript = removeEmptyLines(videoScript);
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);

@@ -140,11 +140,19 @@ const splitArrayItemsBySign = (arr: string[], sign: string): string[] => {
   return result;
 };
 
+const removeEmptyLines = (text: string) => {
+  return text
+    .split('\n')
+    .filter(line => line.trim() !== '')
+    .join('\n');
+};
+
 export {
   matchStr,
   matchLine,
   getMatchLineStr,
   insertAtIndex,
+  removeEmptyLines,
   splitArrayItemsBySign,
   replaceSpecialChar,
   splitStringAtIndex,
