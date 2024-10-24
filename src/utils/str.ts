@@ -147,11 +147,42 @@ const removeEmptyLines = (text: string) => {
     .join('\n');
 };
 
+const processParagraph = (text: string) => {
+  const chinesePunctuation = /[，。？！；]/;
+  const lines = text.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    // 处理空行前的一行
+    if (i < lines.length - 1 && lines[i + 1].trim() === '') {
+      if (!chinesePunctuation.test(lines[i].slice(-1))) {
+        lines[i] += '。';
+      }
+    }
+
+    // 处理包含 1-3 个空格的情况
+    const parts = lines[i].split(/\s+/);
+    for (let j = 0; j < parts.length - 1; j++) {
+      if (
+        parts[j] &&
+        parts[j + 1] &&
+        !chinesePunctuation.test(parts[j].slice(-1)) &&
+        !chinesePunctuation.test(parts[j + 1][0])
+      ) {
+        parts[j] += '。';
+      }
+    }
+    lines[i] = parts.join(' ');
+  }
+
+  return lines.join('\n');
+};
+
 export {
   matchStr,
   matchLine,
   getMatchLineStr,
   insertAtIndex,
+  processParagraph,
   removeEmptyLines,
   splitArrayItemsBySign,
   replaceSpecialChar,

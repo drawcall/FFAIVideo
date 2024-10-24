@@ -153,7 +153,7 @@ const generateSubtitle = async (
       Logger.log(
         `Sorry, getMatchLineStr no vocabulary matched. ${subItems.length}`,
       );
-      return;
+      await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
     }
 
     if (subItems.length !== cscriptLines.length) {
