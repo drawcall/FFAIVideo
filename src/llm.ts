@@ -1,6 +1,7 @@
 import { G4F } from 'g4f';
 import OpenAI from 'openai';
 import axios from 'axios';
+import { get } from 'lodash';
 import { OpenAIApi as AzureOpenAIApi, Configuration } from 'azure-openai';
 import {
   GoogleGenerativeAI,
@@ -140,8 +141,11 @@ const generateResponse = async (
         llmConfig.data,
         llmConfig.requestConfig,
       );
+      
       if (response && response.data) {
-        content = response.data.choices[0]?.message?.content || '';
+        const responsePath = llmConfig.responsePath || 'data.choices[0].message.content';
+        content = get(response.data, responsePath, '');
+        Logger.log(provider, content);
       }
       return content;
     } catch (error) {

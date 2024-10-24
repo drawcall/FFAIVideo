@@ -3,6 +3,7 @@ interface LLMConfig {
   modelName: string;
   baseUrl?: string;
   apiVersion?: string;
+  responsePath?: string;
   data?: any;
   requestConfig?: any;
 }
