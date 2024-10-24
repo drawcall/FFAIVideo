@@ -147,13 +147,6 @@ const generateResponse = async (
         const responsePath =
           llmConfig.responsePath || 'data.choices[0].message.content';
         content = get(response.data, responsePath, '');
-        Logger.log(
-          provider,
-          content,
-          '\n',
-          llmConfig.responsePath,
-          response.data,
-        );
       }
       return content;
     } catch (error) {

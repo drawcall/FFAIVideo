@@ -14,6 +14,7 @@ const defaultLLMConfig: {
   azure: LLMConfig;
   gemini: LLMConfig;
   g4f: LLMConfig;
+  customAI: LLMConfig;
   defalut: LLMConfig;
   [key: string]: LLMConfig;
 } = {
@@ -51,6 +52,12 @@ const defaultLLMConfig: {
     apiKey: 'xxx',
     modelName: 'gpt-3.5-turbo-16k-0613',
     baseUrl: '***',
+  },
+
+  customAI: {
+    apiKey: '',
+    modelName: '',
+    baseUrl: '',
   },
 
   // defalut
