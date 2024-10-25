@@ -53,6 +53,12 @@ interface VideoConfig {
   lastTime?: number;
   removeCache?: boolean;
 
+  materialFunc?: (
+    searchTerm: string,
+    maxClipDuration: number,
+    index: number,
+    cacheDir?: string,
+  ) => Promise<any[]>;
   insertClips?: InsertClip[];
   [key: string]: any;
 }

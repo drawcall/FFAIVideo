@@ -2,13 +2,14 @@ import fs from 'fs-extra';
 import md5 from 'md5';
 import path from 'path';
 import axios from 'axios';
+import { isEmpty, forEach } from 'lodash';
 import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
 import { toResolution } from './utils/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
 import { writeFileWithStream } from './utils/file';
 import { appequal } from './utils/utils';
-import { httpGet } from './utils/http';
+import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
 import { uuid } from './utils/utils';
@@ -27,13 +28,17 @@ const searchVideos = async (
   const { videoAspect = VideoAspect.Portrait } = config;
   const videoOrientation: string = getEnumKeyByValue(VideoAspect, videoAspect);
   const [videoWidth, videoHeight] = toResolution(videoAspect);
-
-  const params = new URLSearchParams();
-  params.append('query', searchTerm);
-  params.append('per_page', '20');
-  params.append('orientation', videoOrientation);
-  const queryUrl = `https://api.pexels.com/videos/search?${params.toString()}`;
-  const data = await httpGet(queryUrl, {}, config.pexels!);
+  const searchData = {
+    query: searchTerm,
+    per_page: '20',
+    orientation: videoOrientation,
+  };
+  const queryUrl = `https://api.pexels.com/videos/search`;
+  const data = await httpGet(
+    buildApiUrl(queryUrl, searchData),
+    {},
+    config.pexels!,
+  );
   if (!data) return [];
 
   const videoItems: MaterialInfo[] = [];
@@ -107,8 +112,21 @@ const downloadVideos = async (
   const validVideoUrls: string[] = [];
   let foundDuration = 0.0;
 
-  for (const searchTerm of searchTerms) {
-    const videoItems = await searchVideos(searchTerm, maxClipDuration, config);
+  for (const [index, searchTerm] of searchTerms.entries()) {
+    let videoItems = [];
+    if (config.materialFunc) {
+      videoItems = await config.materialFunc(
+        searchTerm,
+        index,
+        maxClipDuration,
+        cacheDir
+      );
+      if (isEmpty(videoItems)) {
+        videoItems = await searchVideos(searchTerm, maxClipDuration, config);
+      }
+    } else {
+      videoItems = await searchVideos(searchTerm, maxClipDuration, config);
+    }
 
     for (const item of videoItems) {
       if (!validVideoUrls.includes(item.url)) {

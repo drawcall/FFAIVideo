@@ -1,6 +1,7 @@
-const { generateVideo } = require('../dist');
+const { generateVideo, Logger } = require('../dist');
 const path = require('path');
 
+Logger.enabled = true;
 generateVideo(
   {
     provider: 'g4f',

@@ -34,4 +34,18 @@ const httpGet = async (queryUrl: string, options = {}, site: MaterialSite) => {
   return null;
 };
 
-export { httpGet };
+const buildApiUrl = (baseUrl: string, data = {}) => {
+  const params = new URLSearchParams();
+
+  // 遍历 data 对象，将所有键值对添加到 URLSearchParams
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== undefined && value !== null) {
+      params.append(key, value.toString());
+    }
+  }
+
+  // 如果 params 不为空，则添加 '?' 和参数字符串；否则返回原始 baseUrl
+  return params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+};
+
+export { httpGet, buildApiUrl };

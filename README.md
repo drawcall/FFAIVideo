@@ -124,6 +124,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | subtitleMaxWidth | number | - | Maximum subtitle width |
 | debug | boolean | false | Debug mode |
 | lastTime | number | 5 | Last time |
+| materialFunc | function | null | A custom material synthesis |
 | removeCache | boolean | true | Whether to remove cache |
 
 ## Reference Project

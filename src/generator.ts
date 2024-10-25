@@ -81,7 +81,7 @@ const generateVideo = async (
     subtitleFile = '';
   }
   progress(40);
-
+  
   const downloadedVideos: string[] = await downloadVideos(
     videoTerms,
     videoDuration,
