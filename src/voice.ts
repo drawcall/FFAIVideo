@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import { clone } from 'lodash';
 import { MsEdgeTTS } from 'edge-tts-node';
 import { VoiceConfig } from './config/voice-config';
-import { formatter } from './utils/time';
+import { formatter } from './utils/date';
 import { SubMaker } from './sub-maker';
 import {
   matchStr,
@@ -14,7 +14,7 @@ import {
   replaceSpecialChar,
   splitSubtitleString,
   safeDecodeURIComponent,
-} from './utils/str';
+} from './utils/char';
 import { Logger } from './utils/log';
 
 const getAllVoices = (filterLocals?: string[]): string[] => {

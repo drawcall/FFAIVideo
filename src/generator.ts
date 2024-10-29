@@ -13,7 +13,7 @@ import {
   generateSubtitle,
   parseVoiceName,
 } from './voice';
-import { processParagraph } from './utils/str';
+import { processParagraph } from './utils/char';
 import { Logger } from './utils/log';
 
 const generateVideo = async (
