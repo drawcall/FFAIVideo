@@ -51,6 +51,15 @@ const getMatchLineStr = (
   const cleanedLine = removeSpecialCharacters(line);
   if (cleanedSubLine === cleanedLine) {
     return cleanedLine;
+  } else if (cleanedSubLine.length > cleanedLine.length) {
+    const excessStr = cleanedSubLine.slice(cleanedLine.length);
+    if (scriptLines.length > subIndex + 1) {
+      const nextLine = scriptLines[subIndex + 1];
+      if (nextLine.startsWith(excessStr)) {
+        scriptLines[subIndex + 1] = nextLine.slice(excessStr.length);
+      }
+    }
+    return cleanedSubLine;
   }
 
   return '';

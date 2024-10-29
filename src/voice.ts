@@ -127,7 +127,6 @@ const generateSubtitle = async (
       scriptLines,
       subtitleMaxWidth,
     );
-
     for (let i = 0; i < subMaker.offset.length; i++) {
       let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
       const [initialStartTime, endTime] = offset; // Assume offset is an array or tuple
