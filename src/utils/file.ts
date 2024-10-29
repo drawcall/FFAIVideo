@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { Stream } from 'stream';
+import md5 from 'md5';
 import { Logger } from '../utils/log';
 
 const isFilePath = (url: string): boolean => {
@@ -23,4 +24,16 @@ const writeFileWithStream = (stream: Stream, videoPath: string) => {
   });
 };
 
-export { writeFileWithStream, isFilePath };
+const copyLocalFile = async (targetPath: string, cacheDir: string) => {
+  try {
+    await fs.ensureDir(cacheDir);
+    const videoId = `vid-${md5(Math.random().toString())}`;
+    const videoPath = path.join(cacheDir, `${videoId}.mp4`);
+    await fs.copy(targetPath, videoPath);
+    return videoPath;
+  } catch (err) {
+    return null;
+  }
+};
+
+export { writeFileWithStream, copyLocalFile, isFilePath };

@@ -7,7 +7,7 @@ import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
 import { toResolution } from './utils/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
-import { writeFileWithStream } from './utils/file';
+import { writeFileWithStream, copyLocalFile } from './utils/file';
 import { appequal } from './utils/utils';
 import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
@@ -146,7 +146,7 @@ const downloadVideos = async (
       if (isNetUrl(item.url)) {
         savedVideoPath = await saveVideo(item.url, cacheDir, config);
       } else {
-        savedVideoPath = item.url;
+        savedVideoPath = await copyLocalFile(item.url, cacheDir);
       }
 
       progress(40 + Math.floor((index * 45) / validVideoItems.length));

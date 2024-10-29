@@ -13,7 +13,7 @@ import {
   getSplitIndexAndLenth,
   replaceSpecialChar,
   splitSubtitleString,
-  safeDecodeURIComponent
+  safeDecodeURIComponent,
 } from './utils/str';
 import { Logger } from './utils/log';
 
@@ -150,6 +150,7 @@ const generateSubtitle = async (
       await fs.writeFile(subtitleFile, subItems.join('\n') + '\n', {
         encoding: 'utf-8',
       });
+      Logger.log(`Subtitle synthesis successful. ${subItems.length}`);
     } else {
       Logger.log(
         `Sorry, getMatchLineStr no vocabulary matched. ${subItems.length}`,
