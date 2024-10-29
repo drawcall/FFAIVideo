@@ -61,7 +61,10 @@ const extractMatchedLine = (
 
 // "Hello, world! This is an example. Sentence number two.";
 // Output: [ 'Hello', ' world', ' This is an example', ' Sentence number two', '' ]
-const splitSubtitleByPunctuation = (s: string, maxWidth: number = 9999): string[] => {
+const splitSubtitleByPunctuation = (
+  s: string,
+  maxWidth: number = 9999,
+): string[] => {
   const result: string[] = [];
   let txt = '';
   for (const char of s) {
@@ -70,20 +73,6 @@ const splitSubtitleByPunctuation = (s: string, maxWidth: number = 9999): string[
     } else {
       result.push(txt.trim());
       txt = '';
-    }
-  }
-  return result;
-};
-
-const splitArrayItemsBySign = (arr: string[], sign: string): string[] => {
-  const result = [];
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
-    if (typeof item === 'string' && item.includes(sign)) {
-      const parts = item.split(sign);
-      result.push(...parts.filter(part => part !== ''));
-    } else {
-      result.push(item);
     }
   }
   return result;
@@ -132,6 +121,5 @@ export {
   extractMatchedLine,
   addPunctuationToParagraph,
   removeBlankLines,
-  splitArrayItemsBySign,
   splitSubtitleByPunctuation,
 };

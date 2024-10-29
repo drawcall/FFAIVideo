@@ -1,22 +1,6 @@
 import fs from 'fs-extra';
-import { clone } from 'lodash';
 import { MsEdgeTTS } from 'edge-tts-node';
-import { VoiceConfig } from './config/voice-config';
-import { formatter } from './utils/date';
 import { SubMaker } from './sub-maker';
-import {
-  insertStringAt,
-  getSubarrayInfo,
-  normalizeWhitespace,
-  safeDecodeURIComponent,
-} from './utils/char';
-import {
-  isLineEqual,
-  isLineMatch,
-  splitSubtitleByPunctuation,
-  extractMatchedLine,
-  splitArrayItemsBySign,
-} from './utils/line';
 import { Logger } from './utils/log';
 
 const parseVoiceName = (name: string): string => {
@@ -72,99 +56,6 @@ const tts = async (
   return null;
 };
 
-const generateSubtitle = async (
-  subMaker: SubMaker,
-  text: string,
-  subtitleFile: string,
-  subtitleMaxWidth: number,
-): Promise<void> => {
-  const subItems: string[] = [];
-  let scriptLines = splitSubtitleByPunctuation(normalizeWhitespace(text));
-  let startTime = -1.0;
-  let subIndex = 0;
-  let subLine = '';
-
-  try {
-    const cscriptLines = preSegmentScriptLines(
-      subMaker,
-      scriptLines,
-      subtitleMaxWidth,
-    );
-    for (let i = 0; i < subMaker.offset.length; i++) {
-      let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
-      const [initialStartTime, endTime] = offset; // Assume offset is an array or tuple
-      if (startTime < 0) {
-        startTime = initialStartTime;
-      }
-
-      subLine += safeDecodeURIComponent(sub);
-      const subText = extractMatchedLine(cscriptLines, subLine, subIndex);
-      if (subText) {
-        subIndex++;
-        const line = formatter(subIndex, startTime, endTime, subText);
-        subItems.push(line);
-        startTime = -1.0;
-        subLine = '';
-      }
-    }
-
-    if (subItems.length > 2) {
-      await fs.writeFile(subtitleFile, subItems.join('\n') + '\n', {
-        encoding: 'utf-8',
-      });
-      Logger.log(`Subtitle synthesis successful. ${subItems.length}`);
-    } else {
-      Logger.log(
-        `Sorry, extractMatchedLine no vocabulary matched. ${subItems.length}`,
-      );
-      await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
-    }
-
-    if (subItems.length !== cscriptLines.length) {
-      Logger.warn(
-        `subItems.length != scriptLines.length, subItems len: ${subItems.length}, scriptLines len: ${cscriptLines.length}`,
-      );
-    }
-  } catch (e) {
-    Logger.error(`failed, error: ${e}`);
-  }
-};
-
-const preSegmentScriptLines = (
-  subMaker: SubMaker,
-  scriptLines: string[],
-  subtitleMaxWidth: number,
-): string[] => {
-  const sign = '__x__';
-  let subIndex = 0;
-  let subLines = [];
-  let cscriptLines = clone(scriptLines);
-
-  for (let i = 0; i < subMaker.offset.length; i++) {
-    const sub = subMaker.subs[i];
-    subLines.push(safeDecodeURIComponent(sub));
-    const match = isLineMatch(cscriptLines, subLines.join(''), subIndex);
-    if (match) {
-      const lineStr = cscriptLines[subIndex];
-      if (lineStr.length > subtitleMaxWidth) {
-        const [index, len, subline] = getSubarrayInfo(
-          subLines,
-          subtitleMaxWidth,
-        );
-        const line = lineStr.slice(0, len);
-        if (index > 0 && isLineEqual(subline, line)) {
-          cscriptLines[subIndex] = insertStringAt(lineStr, len, sign);
-        }
-      }
-
-      subIndex++;
-      subLines.length = 0;
-    }
-  }
-
-  return splitArrayItemsBySign(cscriptLines, sign);
-};
-
 const getAudioDuration = (subMaker: SubMaker): number => {
   if (!subMaker.offset) {
     return 0.0;
@@ -172,4 +63,4 @@ const getAudioDuration = (subMaker: SubMaker): number => {
   return subMaker.offset[subMaker.offset.length - 1][1] / 10000000;
 };
 
-export { tts, generateSubtitle, getAudioDuration, parseVoiceName };
+export { tts, getAudioDuration, parseVoiceName };

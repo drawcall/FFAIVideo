@@ -4,15 +4,11 @@ import { isEmpty, isArray } from 'lodash';
 import { progressFun, successFun } from './config/constant';
 import { VideoConfig, mergeConfig, createOutputConfig } from './config/config';
 import { generateTerms } from './llm';
-import { downloadVideos, copyClipToCache } from './material';
 import { combineFinalVideo } from './video';
 import { fileToSubtitles } from './sub-maker';
-import {
-  tts,
-  getAudioDuration,
-  generateSubtitle,
-  parseVoiceName,
-} from './voice';
+import { generateSubtitle } from './subtitle';
+import { downloadVideos, copyClipToCache } from './material';
+import { tts, getAudioDuration, parseVoiceName } from './voice';
 import { addPunctuationToParagraph } from './utils/line';
 import { Logger } from './utils/log';
 
