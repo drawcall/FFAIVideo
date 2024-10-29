@@ -118,24 +118,25 @@ const processingSubVideos = async (
     ffcommand.fps(30);
     const filters = [];
     if (width != videoWidth || height != videoHeight) {
-      let clipRatio = width / height;
-      let videoRatio = videoWidth / videoHeight;
-      if (clipRatio == videoRatio) {
-        filters.push(`scale=${videoWidth}:${videoHeight}`);
+      let scaleFilter, cropFilter;
+      const aspectRatio = videoWidth / videoHeight;
+      const inputAspectRatio = width / height;
+
+      if (inputAspectRatio > aspectRatio) {
+        const scaledHeight = videoHeight;
+        const scaledWidth = Math.round(scaledHeight * inputAspectRatio);
+        scaleFilter = `scale=${scaledWidth}:${scaledHeight},setsar=1:1`;
+        const cropX = Math.round((scaledWidth - videoWidth) / 2);
+        cropFilter = `crop=${videoWidth}:${videoHeight}:${cropX}:0`;
       } else {
-        let scaleFactor;
-        if (clipRatio > videoRatio) {
-          scaleFactor = videoWidth / width;
-        } else {
-          scaleFactor = videoHeight / height;
-        }
-        let newWidth = width * scaleFactor;
-        let newHeight = height * scaleFactor;
-        filters.push(`scale=${newWidth}:${newHeight}`);
+        const scaledWidth = videoWidth;
+        const scaledHeight = Math.round(scaledWidth / inputAspectRatio);
+        scaleFilter = `scale=${scaledWidth}:${scaledHeight},setsar=1:1`;
+        const cropY = Math.round((scaledHeight - videoHeight) / 2);
+        cropFilter = `crop=${videoWidth}:${videoHeight}:0:${cropY}`;
       }
-      filters.push(
-        `pad=${videoWidth}:${videoHeight}:(ow-iw)/2:(oh-ih)/2:black`,
-      );
+
+      filters.push(scaleFilter, cropFilter);
     }
     ffcommand.videoFilters(filters);
     const output = videoPath.replace(/vid-/, 'o-');
