@@ -13,7 +13,7 @@ import {
   generateSubtitle,
   parseVoiceName,
 } from './voice';
-import { processParagraph } from './utils/char';
+import { addPunctuationToParagraph } from './utils/line';
 import { Logger } from './utils/log';
 
 const generateVideo = async (
@@ -32,7 +32,7 @@ const generateVideo = async (
     subtitleMaxWidth = 9999,
   } = config;
 
-  videoScript = processParagraph(videoScript);
+  videoScript = addPunctuationToParagraph(videoScript);
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);

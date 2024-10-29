@@ -1,17 +1,3 @@
-import { PUNCTUATIONS } from '../config/constant';
-
-const matchLine = (
-  scriptLines: string[],
-  subLine: string,
-  subIndex: number,
-): boolean => {
-  if (scriptLines.length <= subIndex) {
-    return false;
-  }
-  const line = scriptLines[subIndex];
-  return matchStr(line, subLine);
-};
-
 const removeSpecialCharacters = (str: string) => {
   const cnRegex =
     /[，。！？、；：“”‘’（）《》【】〈〉「」『』【】〔〕〖〗〈〉《》「」『』【】〔〕【】﹝﹞（）［］｛｝＜＞﹤﹥「」『』【】＜＞《》「」『』【】]/g;
@@ -19,53 +5,7 @@ const removeSpecialCharacters = (str: string) => {
   return str.replace(cnRegex, '').replace(enRegex, '');
 };
 
-const matchStr = (line: string, subLine: string): boolean => {
-  if (subLine === line) {
-    return true;
-  }
-
-  const cleanedSubLine = removeSpecialCharacters(subLine);
-  const cleanedLine = removeSpecialCharacters(line);
-  if (cleanedSubLine === cleanedLine) {
-    return true;
-  }
-
-  return false;
-};
-
-const getMatchLineStr = (
-  scriptLines: string[],
-  subLine: string,
-  subIndex: number,
-): string => {
-  if (scriptLines.length <= subIndex) {
-    return '';
-  }
-
-  const line = scriptLines[subIndex];
-  if (subLine === line) {
-    return scriptLines[subIndex].trim();
-  }
-
-  const cleanedSubLine = removeSpecialCharacters(subLine);
-  const cleanedLine = removeSpecialCharacters(line);
-  if (cleanedSubLine === cleanedLine) {
-    return cleanedLine;
-  } else if (cleanedSubLine.length > cleanedLine.length) {
-    const excessStr = cleanedSubLine.slice(cleanedLine.length);
-    if (scriptLines.length > subIndex + 1) {
-      const nextLine = scriptLines[subIndex + 1];
-      if (nextLine.startsWith(excessStr)) {
-        scriptLines[subIndex + 1] = nextLine.slice(excessStr.length);
-      }
-    }
-    return cleanedSubLine;
-  }
-
-  return '';
-};
-
-const replaceSpecialChar = (text: string): string => {
+const normalizeWhitespace = (text: string): string => {
   return text
     .replace('\n', ' ')
     .replace('[', ' ')
@@ -75,22 +15,6 @@ const replaceSpecialChar = (text: string): string => {
     .replace('{', ' ')
     .replace('}', ' ')
     .trim();
-};
-
-// "Hello, world! This is an example. Sentence number two.";
-// Output: [ 'Hello', ' world', ' This is an example', ' Sentence number two', '' ]
-const splitSubtitleString = (s: string, maxWidth: number = 9999): string[] => {
-  const result: string[] = [];
-  let txt = '';
-  for (const char of s) {
-    if (!PUNCTUATIONS.includes(char) && txt.length < maxWidth) {
-      txt += char;
-    } else {
-      result.push(txt.trim());
-      txt = '';
-    }
-  }
-  return result;
 };
 
 const splitStringAtIndex = (arr: string[], index: number, x: number) => {
@@ -105,7 +29,7 @@ const splitStringAtIndex = (arr: string[], index: number, x: number) => {
   return arr;
 };
 
-const getSplitIndexAndLenth = (
+const getSubarrayInfo = (
   arr: string[],
   max: number,
 ): [number, number, string] => {
@@ -124,7 +48,7 @@ const getSplitIndexAndLenth = (
   return [index, len, str];
 };
 
-const insertAtIndex = (
+const insertStringAt = (
   str: string,
   index: number,
   toInsert: string,
@@ -133,57 +57,6 @@ const insertAtIndex = (
     throw new Error('Index out of bounds');
   }
   return str.slice(0, index) + toInsert + str.slice(index);
-};
-
-const splitArrayItemsBySign = (arr: string[], sign: string): string[] => {
-  const result = [];
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
-    if (typeof item === 'string' && item.includes(sign)) {
-      const parts = item.split(sign);
-      result.push(...parts.filter(part => part !== ''));
-    } else {
-      result.push(item);
-    }
-  }
-  return result;
-};
-
-const removeEmptyLines = (text: string) => {
-  return text
-    .split('\n')
-    .filter(line => line.trim() !== '')
-    .join('\n');
-};
-
-const processParagraph = (text: string) => {
-  const chinesePunctuation = /[，。？！；]/;
-  const lines = text.split('\n');
-
-  for (let i = 0; i < lines.length; i++) {
-    // 处理空行前的一行
-    if (i < lines.length - 1 && lines[i + 1].trim() === '') {
-      if (!chinesePunctuation.test(lines[i].slice(-1))) {
-        lines[i] += '。';
-      }
-    }
-
-    // 处理包含 1-3 个空格的情况
-    const parts = lines[i].split(/\s+/);
-    for (let j = 0; j < parts.length - 1; j++) {
-      if (
-        parts[j] &&
-        parts[j + 1] &&
-        !chinesePunctuation.test(parts[j].slice(-1)) &&
-        !chinesePunctuation.test(parts[j + 1][0])
-      ) {
-        parts[j] += '。';
-      }
-    }
-    lines[i] = parts.join(' ');
-  }
-
-  return lines.join('\n');
 };
 
 const safeDecodeURIComponent = (str: string) => {
@@ -195,16 +68,10 @@ const safeDecodeURIComponent = (str: string) => {
 };
 
 export {
-  matchStr,
-  matchLine,
-  getMatchLineStr,
-  insertAtIndex,
-  processParagraph,
-  removeEmptyLines,
-  splitArrayItemsBySign,
-  replaceSpecialChar,
+  insertStringAt,
+  normalizeWhitespace,
   splitStringAtIndex,
-  splitSubtitleString,
-  getSplitIndexAndLenth,
+  getSubarrayInfo,
   safeDecodeURIComponent,
+  removeSpecialCharacters,
 };

@@ -5,56 +5,19 @@ import { VoiceConfig } from './config/voice-config';
 import { formatter } from './utils/date';
 import { SubMaker } from './sub-maker';
 import {
-  matchStr,
-  matchLine,
-  insertAtIndex,
-  getMatchLineStr,
-  splitArrayItemsBySign,
-  getSplitIndexAndLenth,
-  replaceSpecialChar,
-  splitSubtitleString,
+  insertStringAt,
+  getSubarrayInfo,
+  normalizeWhitespace,
   safeDecodeURIComponent,
 } from './utils/char';
+import {
+  isLineEqual,
+  isLineMatch,
+  splitSubtitleByPunctuation,
+  extractMatchedLine,
+  splitArrayItemsBySign,
+} from './utils/line';
 import { Logger } from './utils/log';
-
-const getAllVoices = (filterLocals?: string[]): string[] => {
-  if (!filterLocals) {
-    filterLocals = ['zh-CN', 'en-US', 'zh-HK', 'zh-TW'];
-  }
-
-  const voicesStr = VoiceConfig.trim();
-  const voices: string[] = [];
-  let name = '';
-  for (const line of voicesStr.split('\n')) {
-    const trimmedLine = line.trim();
-    if (!trimmedLine) {
-      continue;
-    }
-
-    if (trimmedLine.startsWith('Name: ')) {
-      name = trimmedLine.substring(6).trim();
-    }
-
-    if (trimmedLine.startsWith('Gender: ')) {
-      const gender = trimmedLine.substring(8).trim();
-      if (name && gender) {
-        if (filterLocals) {
-          for (const filterLocal of filterLocals) {
-            if (name.toLowerCase().startsWith(filterLocal.toLowerCase())) {
-              voices.push(`${name}-${gender}`);
-            }
-          }
-        } else {
-          voices.push(`${name}-${gender}`);
-        }
-        name = '';
-      }
-    }
-  }
-
-  voices.sort();
-  return voices;
-};
 
 const parseVoiceName = (name: string): string => {
   return name.replace('-Female', '').replace('-Male', '').trim();
@@ -116,7 +79,7 @@ const generateSubtitle = async (
   subtitleMaxWidth: number,
 ): Promise<void> => {
   const subItems: string[] = [];
-  let scriptLines = splitSubtitleString(replaceSpecialChar(text));
+  let scriptLines = splitSubtitleByPunctuation(normalizeWhitespace(text));
   let startTime = -1.0;
   let subIndex = 0;
   let subLine = '';
@@ -135,7 +98,7 @@ const generateSubtitle = async (
       }
 
       subLine += safeDecodeURIComponent(sub);
-      const subText = getMatchLineStr(cscriptLines, subLine, subIndex);
+      const subText = extractMatchedLine(cscriptLines, subLine, subIndex);
       if (subText) {
         subIndex++;
         const line = formatter(subIndex, startTime, endTime, subText);
@@ -152,7 +115,7 @@ const generateSubtitle = async (
       Logger.log(`Subtitle synthesis successful. ${subItems.length}`);
     } else {
       Logger.log(
-        `Sorry, getMatchLineStr no vocabulary matched. ${subItems.length}`,
+        `Sorry, extractMatchedLine no vocabulary matched. ${subItems.length}`,
       );
       await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
     }
@@ -180,17 +143,17 @@ const preSegmentScriptLines = (
   for (let i = 0; i < subMaker.offset.length; i++) {
     const sub = subMaker.subs[i];
     subLines.push(safeDecodeURIComponent(sub));
-    const match = matchLine(cscriptLines, subLines.join(''), subIndex);
+    const match = isLineMatch(cscriptLines, subLines.join(''), subIndex);
     if (match) {
       const lineStr = cscriptLines[subIndex];
       if (lineStr.length > subtitleMaxWidth) {
-        const [index, len, subline] = getSplitIndexAndLenth(
+        const [index, len, subline] = getSubarrayInfo(
           subLines,
           subtitleMaxWidth,
         );
         const line = lineStr.slice(0, len);
-        if (index > 0 && matchStr(subline, line)) {
-          cscriptLines[subIndex] = insertAtIndex(lineStr, len, sign);
+        if (index > 0 && isLineEqual(subline, line)) {
+          cscriptLines[subIndex] = insertStringAt(lineStr, len, sign);
         }
       }
 
