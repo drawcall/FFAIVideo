@@ -13,6 +13,7 @@ import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
 import { uuid } from './utils/utils';
+import { isNetUrl } from './utils/http';
 
 interface MaterialInfo {
   provider: string;
@@ -141,7 +142,13 @@ const downloadVideos = async (
   for (const item of validVideoItems) {
     try {
       index++;
-      const savedVideoPath = await saveVideo(item.url, cacheDir, config);
+      let savedVideoPath;
+      if (isNetUrl(item.url)) {
+        savedVideoPath = await saveVideo(item.url, cacheDir, config);
+      } else {
+        savedVideoPath = item.url;
+      }
+
       progress(40 + Math.floor((index * 45) / validVideoItems.length));
       if (savedVideoPath) {
         videoPaths.push(savedVideoPath);
@@ -166,7 +173,7 @@ const copyClipToCache = async (
 ): Promise<{ videoId: string; newPath: string }> => {
   const videoId = `vid-${uuid().substring(0, 8)}`;
   const newPath = path.join(cacheDir, videoId);
-  const isUrl = /^https?:\/\//.test(clipPath);
+  const isUrl = isNetUrl(clipPath);
 
   if (isUrl) {
     try {

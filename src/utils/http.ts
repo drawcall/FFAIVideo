@@ -48,4 +48,8 @@ const buildApiUrl = (baseUrl: string, data = {}) => {
   return params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
 };
 
-export { httpGet, buildApiUrl };
+const isNetUrl = (url: string) => {
+  return /^(https?|ftp|file|ws|wss):\/\//.test(url);
+};
+
+export { httpGet, buildApiUrl, isNetUrl };
