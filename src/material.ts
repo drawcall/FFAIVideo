@@ -116,12 +116,12 @@ const downloadVideos = async (
   for (const [index, searchTerm] of searchTerms.entries()) {
     let videoItems = [];
     if (config.materialFunc) {
-      videoItems = await config.materialFunc(
+      videoItems = await config.materialFunc({
         searchTerm,
         index,
         maxClipDuration,
         cacheDir,
-      );
+      });
       if (isEmpty(videoItems)) {
         videoItems = await searchVideos(searchTerm, maxClipDuration, config);
       }

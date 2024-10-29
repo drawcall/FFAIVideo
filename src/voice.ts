@@ -13,6 +13,7 @@ import {
   getSplitIndexAndLenth,
   replaceSpecialChar,
   splitSubtitleString,
+  safeDecodeURIComponent
 } from './utils/str';
 import { Logger } from './utils/log';
 
@@ -134,7 +135,7 @@ const generateSubtitle = async (
         startTime = initialStartTime;
       }
 
-      subLine += decodeURIComponent(sub);
+      subLine += safeDecodeURIComponent(sub);
       const subText = getMatchLineStr(cscriptLines, subLine, subIndex);
       if (subText) {
         subIndex++;
@@ -178,7 +179,7 @@ const preSegmentScriptLines = (
 
   for (let i = 0; i < subMaker.offset.length; i++) {
     const sub = subMaker.subs[i];
-    subLines.push(decodeURIComponent(sub));
+    subLines.push(safeDecodeURIComponent(sub));
     const match = matchLine(cscriptLines, subLines.join(''), subIndex);
     if (match) {
       const lineStr = cscriptLines[subIndex];

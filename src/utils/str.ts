@@ -177,6 +177,14 @@ const processParagraph = (text: string) => {
   return lines.join('\n');
 };
 
+const safeDecodeURIComponent = (str: string) => {
+  try {
+    return decodeURIComponent(str);
+  } catch (e) {
+    return str;
+  }
+};
+
 export {
   matchStr,
   matchLine,
@@ -189,4 +197,5 @@ export {
   splitStringAtIndex,
   splitSubtitleString,
   getSplitIndexAndLenth,
+  safeDecodeURIComponent,
 };

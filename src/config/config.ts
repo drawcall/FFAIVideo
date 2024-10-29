@@ -18,6 +18,13 @@ interface InsertClip {
   position: number;
 }
 
+interface SearchParams {
+  searchTerm: string;
+  maxClipDuration?: number;
+  index: number;
+  cacheDir?: string;
+}
+
 interface VideoConfig {
   taskId?: string;
   provider?: string;
@@ -53,12 +60,7 @@ interface VideoConfig {
   lastTime?: number;
   removeCache?: boolean;
 
-  materialFunc?: (
-    searchTerm: string,
-    maxClipDuration: number,
-    index: number,
-    cacheDir?: string,
-  ) => Promise<any[]>;
+  materialFunc?: (param: SearchParams) => Promise<any[]>;
   insertClips?: InsertClip[];
   [key: string]: any;
 }

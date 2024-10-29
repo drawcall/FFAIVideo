@@ -37,7 +37,7 @@ const generateVideo = async (
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);
   // AI generates Terms based on text content.
-  if (!videoTerms) {
+  if (isEmpty(videoTerms)) {
     videoTerms = await generateTerms(videoScript.trim(), config);
   } else {
     if (typeof videoTerms === 'string') {
@@ -81,7 +81,7 @@ const generateVideo = async (
     subtitleFile = '';
   }
   progress(40);
-  
+
   const downloadedVideos: string[] = await downloadVideos(
     videoTerms,
     videoDuration,
