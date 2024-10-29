@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import md5 from 'md5';
 import path from 'path';
 import axios from 'axios';
-import { isEmpty, forEach } from 'lodash';
+import { isEmpty, sample } from 'lodash';
 import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
 import { toResolution } from './utils/video-aspect';
@@ -17,6 +17,7 @@ import { uuid } from './utils/utils';
 interface MaterialInfo {
   provider: string;
   url: string;
+  keyword?: string;
   duration: number;
 }
 
@@ -30,7 +31,7 @@ const searchVideos = async (
   const [videoWidth, videoHeight] = toResolution(videoAspect);
   const searchData = {
     query: searchTerm,
-    per_page: '20',
+    per_page: '15',
     orientation: videoOrientation,
   };
   const queryUrl = `https://api.pexels.com/videos/search`;
@@ -61,6 +62,7 @@ const searchVideos = async (
       if (appequal(w, videoWidth, n) && appequal(h, videoHeight, n)) {
         const item: MaterialInfo = {
           provider: 'pexels',
+          keyword: searchTerm,
           url: file['link'],
           duration: duration,
         };
@@ -109,8 +111,6 @@ const downloadVideos = async (
 ): Promise<string[]> => {
   const { videoClipDuration: maxClipDuration = 5 } = config;
   let validVideoItems: MaterialInfo[] = [];
-  const validVideoUrls: string[] = [];
-  let foundDuration = 0.0;
 
   for (const [index, searchTerm] of searchTerms.entries()) {
     let videoItems = [];
@@ -119,7 +119,7 @@ const downloadVideos = async (
         searchTerm,
         index,
         maxClipDuration,
-        cacheDir
+        cacheDir,
       );
       if (isEmpty(videoItems)) {
         videoItems = await searchVideos(searchTerm, maxClipDuration, config);
@@ -128,14 +128,12 @@ const downloadVideos = async (
       videoItems = await searchVideos(searchTerm, maxClipDuration, config);
     }
 
-    for (const item of videoItems) {
-      if (!validVideoUrls.includes(item.url)) {
-        validVideoItems.push(item);
-        validVideoUrls.push(item.url);
-        foundDuration += item.duration;
-      }
+    if (videoItems.length > 0) {
+      const randomItem = sample(videoItems);
+      validVideoItems.push(randomItem);
     }
   }
+  validVideoItems = validVideoItems.concat(validVideoItems);
 
   const videoPaths: string[] = [];
   let totalDuration = 0.0;
