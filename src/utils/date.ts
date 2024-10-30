@@ -6,14 +6,14 @@ const mktimestamp = (time_unit: number) => {
 };
 
 const formatter = (
-  idx: number,
+  timeid: number,
   startTime: number,
   endTime: number,
   subText: string,
 ): string => {
   const startT = mktimestamp(startTime).replace('.', ',');
   const endT = mktimestamp(endTime).replace('.', ',');
-  return `${idx}\n${startT} --> ${endT}\n${subText}\n`;
+  return `${timeid}\n${startT} --> ${endT}\n${subText}\n`;
 };
 
 export { mktimestamp, formatter };

@@ -29,6 +29,10 @@ const splitStringAtIndex = (arr: string[], index: number, x: number) => {
   return arr;
 };
 
+// const arr = ["hello", "world", "this", "is", "a", "test"];
+// const max = 10;
+// const result = getSubarrayInfo(arr, max);
+// output: [1, 10, "helloworld"]
 const getSubarrayInfo = (
   arr: string[],
   max: number,
@@ -67,7 +71,15 @@ const safeDecodeURIComponent = (str: string) => {
   }
 };
 
+const removeBlankLines = (text: string) => {
+  return text
+    .split('\n')
+    .filter(line => line.trim() !== '')
+    .join('\n');
+};
+
 export {
+  removeBlankLines,
   insertStringAt,
   normalizeWhitespace,
   splitStringAtIndex,

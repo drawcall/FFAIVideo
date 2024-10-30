@@ -1,13 +1,13 @@
 import { PUNCTUATIONS } from '../config/constant';
 import { removeSpecialCharacters } from './char';
 
-const isLineEqual = (line: string, subLine: string): boolean => {
-  if (subLine === line) {
+const isLineEqual = (lineText: string, subLine: string): boolean => {
+  if (subLine === lineText) {
     return true;
   }
 
   const cleanedSubLine = removeSpecialCharacters(subLine);
-  const cleanedLine = removeSpecialCharacters(line);
+  const cleanedLine = removeSpecialCharacters(lineText);
   if (cleanedSubLine === cleanedLine) {
     return true;
   }
@@ -15,7 +15,11 @@ const isLineEqual = (line: string, subLine: string): boolean => {
   return false;
 };
 
-const extractMatchedLine = (
+// const scriptLines = ["Hello, world!", "This is a test."];
+// const scriptLinesIndex = 1;
+// const subLine = "This is a test!";
+// output: "This is a test"
+const getEqualedLine = (
   scriptLines: string[],
   scriptLinesIndex: number,
   subLine: string,
@@ -24,24 +28,15 @@ const extractMatchedLine = (
     return '';
   }
 
-  const line = scriptLines[scriptLinesIndex];
-  if (subLine === line) {
+  const lineText = scriptLines[scriptLinesIndex];
+  if (subLine === lineText) {
     return scriptLines[scriptLinesIndex].trim();
   }
 
   const cleanedSubLine = removeSpecialCharacters(subLine);
-  const cleanedLine = removeSpecialCharacters(line);
+  const cleanedLine = removeSpecialCharacters(lineText);
   if (cleanedSubLine === cleanedLine) {
     return cleanedLine;
-  } else if (cleanedSubLine.length > cleanedLine.length) {
-    const excessStr = cleanedSubLine.slice(cleanedLine.length);
-    if (scriptLines.length > scriptLinesIndex + 1) {
-      const nextLine = scriptLines[scriptLinesIndex + 1];
-      if (nextLine.startsWith(excessStr)) {
-        scriptLines[scriptLinesIndex + 1] = nextLine.slice(excessStr.length);
-      }
-    }
-    return cleanedSubLine;
   }
 
   return '';
@@ -66,11 +61,24 @@ const splitSubtitleByPunctuation = (
   return result;
 };
 
-const removeBlankLines = (text: string) => {
-  return text
-    .split('\n')
-    .filter(line => line.trim() !== '')
-    .join('\n');
+const resetScriptLinesContent = (
+  scriptLines: string[],
+  scriptLinesIndex: number,
+  subLine: string,
+): void => {
+  const lineText = scriptLines[scriptLinesIndex];
+  const cleanedSubLine = removeSpecialCharacters(subLine);
+  const cleanedLine = removeSpecialCharacters(lineText);
+
+  if (cleanedSubLine.length > cleanedLine.length) {
+    const excessStr = cleanedSubLine.slice(cleanedLine.length);
+    if (scriptLines.length > scriptLinesIndex + 1) {
+      const nextLine = scriptLines[scriptLinesIndex + 1];
+      if (nextLine.startsWith(excessStr)) {
+        scriptLines[scriptLinesIndex + 1] = nextLine.slice(excessStr.length);
+      }
+    }
+  }
 };
 
 const addPunctuationToParagraph = (text: string) => {
@@ -105,8 +113,8 @@ const addPunctuationToParagraph = (text: string) => {
 
 export {
   isLineEqual,
-  extractMatchedLine,
+  getEqualedLine,
+  resetScriptLinesContent,
   addPunctuationToParagraph,
-  removeBlankLines,
   splitSubtitleByPunctuation,
 };

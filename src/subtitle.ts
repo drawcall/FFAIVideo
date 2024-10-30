@@ -10,8 +10,9 @@ import {
 } from './utils/char';
 import {
   isLineEqual,
+  getEqualedLine,
+  resetScriptLinesContent,
   splitSubtitleByPunctuation,
-  extractMatchedLine,
 } from './utils/line';
 import { Logger } from './utils/log';
 
@@ -25,44 +26,48 @@ const generateSubtitle = async (
   const formattedSubtitles: string[] = [];
   let scriptLines = splitSubtitleByPunctuation(normalizeWhitespace(text));
   let startTime = -1.0;
+  let endTime = -1.0;
   let scriptLinesIndex = 0;
   let subLine = '';
 
-  try {
-    const scriptLinesc = segmentLinesBasedOnSubtitles(
-      subMaker,
-      scriptLines,
-      subtitleMaxWidth,
-    );
+  const scriptLinesc = resplitScriptLinesByMaxWidth(
+    subMaker,
+    scriptLines,
+    subtitleMaxWidth,
+  );
 
-    for (let i = 0; i < subMaker.offset.length; i++) {
-      let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
-      const [initialStartTime, endTime] = offset; // Assume offset is an array or tuple
-      if (startTime < 0) {
-        startTime = initialStartTime;
-      }
-
-      subLine += safeDecodeURIComponent(sub);
-      const matchedLine = extractMatchedLine(
-        scriptLinesc,
+  for (let i = 0; i < subMaker.offset.length; i++) {
+    let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
+    const [starTime, enTime] = offset; // Assume offset is an array or tuple
+    if (startTime < 0) startTime = starTime;
+    endTime = enTime;
+    
+    subLine += safeDecodeURIComponent(sub);
+    const lineText = getEqualedLine(scriptLinesc, scriptLinesIndex, subLine);
+    if (lineText) {
+      scriptLinesIndex++;
+      const subtitle = formatter(
         scriptLinesIndex,
-        subLine,
+        startTime,
+        endTime,
+        lineText,
       );
-      if (matchedLine) {
-        scriptLinesIndex++;
-        const subtitle = formatter(
-          scriptLinesIndex,
-          startTime,
-          endTime,
-          matchedLine,
-        );
-        formattedSubtitles.push(subtitle);
-        startTime = -1.0;
-        subLine = '';
-      }
+      formattedSubtitles.push(subtitle);
+      startTime = -1.0;
+      endTime = -1.0;
+      subLine = '';
     }
+  }
 
-    // write file
+  await writeSubtitles(subtitleFile, formattedSubtitles, scriptLinesc.length);
+};
+
+const writeSubtitles = async (
+  subtitleFile: string,
+  formattedSubtitles: string[],
+  scriptLinescLength: number,
+): Promise<void> => {
+  try {
     if (formattedSubtitles.length > 2) {
       await fs.writeFile(subtitleFile, formattedSubtitles.join('\n') + '\n', {
         encoding: 'utf-8',
@@ -70,14 +75,14 @@ const generateSubtitle = async (
       Logger.log(`Subtitle synthesis successful. ${formattedSubtitles.length}`);
     } else {
       Logger.log(
-        `Sorry, extractMatchedLine no vocabulary matched. ${formattedSubtitles.length}`,
+        `Sorry, getEqualedLine no vocabulary equaled. ${formattedSubtitles.length}`,
       );
       await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
     }
 
-    if (formattedSubtitles.length !== scriptLinesc.length) {
+    if (formattedSubtitles.length !== scriptLinescLength) {
       Logger.warn(
-        `formattedSubtitles.length != scriptLines.length, formattedSubtitles len: ${formattedSubtitles.length}, scriptLines len: ${scriptLinesc.length}`,
+        `formattedSubtitles.length != scriptLines.length, formattedSubtitles len: ${formattedSubtitles.length}, scriptLines len: ${scriptLinescLength}`,
       );
     }
   } catch (e) {
@@ -85,34 +90,32 @@ const generateSubtitle = async (
   }
 };
 
-const segmentLinesBasedOnSubtitles = (
+const resplitScriptLinesByMaxWidth = (
   subMaker: SubMaker,
   scriptLines: string[],
   subtitleMaxWidth: number,
 ): string[] => {
-  let scriptLinesIndex = 0;
   let subLines = [];
+  let scriptLinesIndex = 0;
   let scriptLinesc = clone(scriptLines);
 
   for (let i = 0; i < subMaker.offset.length; i++) {
     const sub = subMaker.subs[i];
     subLines.push(safeDecodeURIComponent(sub));
-    const matched = isLineMatch(
-      scriptLinesc,
-      scriptLinesIndex,
-      subLines.join(''),
-    );
+    const equaled =
+      scriptLines.length > scriptLinesIndex &&
+      isLineEqual(scriptLines[scriptLinesIndex], subLines.join(''));
 
-    if (matched) {
-      const lineStr = scriptLinesc[scriptLinesIndex];
-      if (lineStr.length > subtitleMaxWidth) {
+    if (equaled) {
+      const lineText = scriptLinesc[scriptLinesIndex];
+      if (lineText.length > subtitleMaxWidth) {
         const [index, len, subline] = getSubarrayInfo(
           subLines,
           subtitleMaxWidth,
         );
-        const line = lineStr.slice(0, len);
+        const line = lineText.slice(0, len);
         if (index > 0 && isLineEqual(subline, line)) {
-          scriptLinesc[scriptLinesIndex] = insertStringAt(lineStr, len, SIGN);
+          scriptLinesc[scriptLinesIndex] = insertStringAt(lineText, len, SIGN);
         }
       }
 
@@ -124,6 +127,8 @@ const segmentLinesBasedOnSubtitles = (
   return splitArrayItemsBySign(scriptLinesc);
 };
 
+// ['apple', 'banana__x__cherry', 'date__x____x__fig', 'grape'];
+// ['apple', 'banana', 'cherry', 'date', 'fig', 'grape']
 const splitArrayItemsBySign = (target: string[]): string[] => {
   const result = [];
   for (let i = 0; i < target.length; i++) {
@@ -136,18 +141,6 @@ const splitArrayItemsBySign = (target: string[]): string[] => {
     }
   }
   return result;
-};
-
-const isLineMatch = (
-  scriptLines: string[],
-  scriptLinesIndex: number,
-  subLine: string,
-): boolean => {
-  if (scriptLines.length <= scriptLinesIndex) {
-    return false;
-  }
-  const line = scriptLines[scriptLinesIndex];
-  return isLineEqual(line, subLine);
 };
 
 export { generateSubtitle };
