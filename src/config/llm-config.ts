@@ -5,6 +5,7 @@ interface LLMConfig {
   apiVersion?: string;
   responsePath?: string;
   data?: any;
+  provider?: string,
   requestConfig?: any;
 }
 
@@ -14,6 +15,7 @@ const defaultLLMConfig: {
   azure: LLMConfig;
   gemini: LLMConfig;
   g4f: LLMConfig;
+  gpt4js: LLMConfig;
   customAI: LLMConfig;
   defalut: LLMConfig;
   [key: string]: LLMConfig;
@@ -51,6 +53,14 @@ const defaultLLMConfig: {
   g4f: {
     apiKey: 'xxx',
     modelName: 'gpt-3.5-turbo-16k-0613',
+    baseUrl: '***',
+  },
+
+  // gpt4js
+  gpt4js: {
+    apiKey: 'xxx',
+    provider: "Nextway",
+    modelName: 'gpt-4o-free',
     baseUrl: '***',
   },
 

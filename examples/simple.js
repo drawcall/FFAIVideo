@@ -4,7 +4,7 @@ const path = require('path');
 Logger.enabled = true;
 generateVideo(
   {
-    provider: 'g4f',
+    provider: 'gpt4js',
     termsNum: 8,
     subtitleMaxWidth: 9,
     videoClipDuration: 10,

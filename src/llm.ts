@@ -1,6 +1,7 @@
 import { G4F } from 'g4f';
 import OpenAI from 'openai';
 import axios from 'axios';
+import getGPT4js from 'gpt4js';
 import { get } from 'lodash';
 import { OpenAIApi as AzureOpenAIApi, Configuration } from 'azure-openai';
 import {
@@ -21,6 +22,7 @@ const getLLMConfig = (config: VideoConfig): LLMConfig => {
     azure: config.azure,
     gemini: config.gemini,
     g4f: config.g4f,
+    gpt4js: config.gpt4js,
     custom: config.customAI,
   };
 
@@ -64,6 +66,28 @@ const generateResponse = async (
       });
     } catch (e) {
       Logger.log(`Sorry, there was an error calling g4f.`, e);
+    }
+    return content;
+  }
+
+  if (provider === 'gpt4js') {
+    // https://www.npmjs.com/package/gpt4js
+    const providerName = config.gpt4js?.provider || 'Nextway';
+    const gpt4js = await getGPT4js();
+    const provider = gpt4js.createProvider(providerName);
+    const modelName = config.gpt4js!.modelName;
+    const messages = [{ role: 'user', content: prompt }];
+    try {
+      content = await provider.chatCompletion(
+        messages,
+        {
+          provider: providerName,
+          model: modelName,
+        },
+        (data: any) => {},
+      );
+    } catch (e) {
+      Logger.log(`Sorry, there was an error calling gpt4js.`, e);
     }
     return content;
   }
