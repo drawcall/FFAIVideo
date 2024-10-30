@@ -1,18 +1,6 @@
 import { PUNCTUATIONS } from '../config/constant';
 import { removeSpecialCharacters } from './char';
 
-const isLineMatch = (
-  scriptLines: string[],
-  subLine: string,
-  subIndex: number,
-): boolean => {
-  if (scriptLines.length <= subIndex) {
-    return false;
-  }
-  const line = scriptLines[subIndex];
-  return isLineEqual(line, subLine);
-};
-
 const isLineEqual = (line: string, subLine: string): boolean => {
   if (subLine === line) {
     return true;
@@ -29,16 +17,16 @@ const isLineEqual = (line: string, subLine: string): boolean => {
 
 const extractMatchedLine = (
   scriptLines: string[],
+  scriptLinesIndex: number,
   subLine: string,
-  subIndex: number,
 ): string => {
-  if (scriptLines.length <= subIndex) {
+  if (scriptLines.length <= scriptLinesIndex) {
     return '';
   }
 
-  const line = scriptLines[subIndex];
+  const line = scriptLines[scriptLinesIndex];
   if (subLine === line) {
-    return scriptLines[subIndex].trim();
+    return scriptLines[scriptLinesIndex].trim();
   }
 
   const cleanedSubLine = removeSpecialCharacters(subLine);
@@ -47,10 +35,10 @@ const extractMatchedLine = (
     return cleanedLine;
   } else if (cleanedSubLine.length > cleanedLine.length) {
     const excessStr = cleanedSubLine.slice(cleanedLine.length);
-    if (scriptLines.length > subIndex + 1) {
-      const nextLine = scriptLines[subIndex + 1];
+    if (scriptLines.length > scriptLinesIndex + 1) {
+      const nextLine = scriptLines[scriptLinesIndex + 1];
       if (nextLine.startsWith(excessStr)) {
-        scriptLines[subIndex + 1] = nextLine.slice(excessStr.length);
+        scriptLines[scriptLinesIndex + 1] = nextLine.slice(excessStr.length);
       }
     }
     return cleanedSubLine;
@@ -117,7 +105,6 @@ const addPunctuationToParagraph = (text: string) => {
 
 export {
   isLineEqual,
-  isLineMatch,
   extractMatchedLine,
   addPunctuationToParagraph,
   removeBlankLines,
