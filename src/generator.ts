@@ -9,7 +9,7 @@ import { fileToSubtitles } from './sub-maker';
 import { generateSubtitle } from './subtitle';
 import { downloadVideos, copyClipToCache } from './material';
 import { tts, getAudioDuration, parseVoiceName } from './voice';
-import { addPunctuationToParagraph } from './utils/line';
+import { addPunctuationToParagraph, normalizeWhitespace } from './utils/line';
 import { Logger } from './utils/log';
 
 const generateVideo = async (
@@ -28,7 +28,7 @@ const generateVideo = async (
     subtitleMaxWidth = 9999,
   } = config;
 
-  videoScript = addPunctuationToParagraph(videoScript);
+  videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);

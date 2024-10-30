@@ -16,12 +16,13 @@ const tts = async (
   MsEdgeTTS.wordBoundaryEnabled = true;
   try {
     let edgeTTS = new MsEdgeTTS(undefined, false);
+    console.log(voiceName,MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
     await edgeTTS.setMetadata(
       voiceName,
       MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
     );
     const subMaker = new SubMaker();
-    //const file = fs.createWriteStream(voiceFile);
+
     await new Promise((resolve, reject) => {
       edgeTTS
         .toStream(text)
@@ -51,7 +52,7 @@ const tts = async (
     Logger.log(`voice output file: ${voiceFile}`);
     return subMaker;
   } catch (e) {
-    Logger.log(`failed, error: ${e}`);
+    Logger.error(`voice failed, error: ${e}`);
   }
   return null;
 };

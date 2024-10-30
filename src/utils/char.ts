@@ -29,29 +29,6 @@ const splitStringAtIndex = (arr: string[], index: number, x: number) => {
   return arr;
 };
 
-// const arr = ["hello", "world", "this", "is", "a", "test"];
-// const max = 10;
-// const result = getSubarrayInfo(arr, max);
-// output: [1, 10, "helloworld"]
-const getSubarrayInfo = (
-  arr: string[],
-  max: number,
-): [number, number, string] => {
-  let len = 0;
-  let index = 0;
-  let str = '';
-  for (let i = 0; i < arr.length; i++) {
-    if (len > max) {
-      break;
-    } else {
-      len += arr[i].length;
-      str += arr[i];
-      index = i;
-    }
-  }
-  return [index, len, str];
-};
-
 const insertStringAt = (
   str: string,
   index: number,
@@ -83,7 +60,6 @@ export {
   insertStringAt,
   normalizeWhitespace,
   splitStringAtIndex,
-  getSubarrayInfo,
   safeDecodeURIComponent,
   removeSpecialCharacters,
 };

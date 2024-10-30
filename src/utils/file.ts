@@ -1,7 +1,7 @@
+import md5 from 'md5';
 import path from 'path';
 import fs from 'fs-extra';
 import { Stream } from 'stream';
-import md5 from 'md5';
 import { Logger } from '../utils/log';
 
 const isFilePath = (url: string): boolean => {
@@ -36,4 +36,32 @@ const copyLocalFile = async (targetPath: string, cacheDir: string) => {
   }
 };
 
-export { writeFileWithStream, copyLocalFile, isFilePath };
+const writeSubtitles = async (
+  subtitleFile: string,
+  formattedSubtitles: string[],
+  scriptLinescLength: number,
+): Promise<void> => {
+  try {
+    if (formattedSubtitles.length > 2) {
+      await fs.writeFile(subtitleFile, formattedSubtitles.join('\n') + '\n', {
+        encoding: 'utf-8',
+      });
+      Logger.log(`Subtitle synthesis successful. ${formattedSubtitles.length}`);
+    } else {
+      Logger.log(
+        `Sorry, getEqualedLine no vocabulary equaled. ${formattedSubtitles.length}`,
+      );
+      await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
+    }
+
+    if (formattedSubtitles.length !== scriptLinescLength) {
+      Logger.warn(
+        `formattedSubtitles.length != scriptLines.length, formattedSubtitles len: ${formattedSubtitles.length}, scriptLines len: ${scriptLinescLength}`,
+      );
+    }
+  } catch (e) {
+    Logger.error(`subtitle failed, error: ${e}`);
+  }
+};
+
+export { writeFileWithStream, writeSubtitles, copyLocalFile, isFilePath };

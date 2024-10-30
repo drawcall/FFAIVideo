@@ -19,26 +19,16 @@ const isLineEqual = (lineText: string, subLine: string): boolean => {
 // const scriptLinesIndex = 1;
 // const subLine = "This is a test!";
 // output: "This is a test"
-const getEqualedLine = (
-  scriptLines: string[],
-  scriptLinesIndex: number,
-  subLine: string,
-): string => {
-  if (scriptLines.length <= scriptLinesIndex) {
-    return '';
-  }
-
-  const lineText = scriptLines[scriptLinesIndex];
-  if (subLine === lineText) {
-    return scriptLines[scriptLinesIndex].trim();
+const getEqualedLine = (targetLine: string, subLine: string): string => {
+  if (subLine === targetLine) {
+    return targetLine.trim();
   }
 
   const cleanedSubLine = removeSpecialCharacters(subLine);
-  const cleanedLine = removeSpecialCharacters(lineText);
-  if (cleanedSubLine === cleanedLine) {
-    return cleanedLine;
+  const cleanedTargetLine = removeSpecialCharacters(targetLine);
+  if (cleanedSubLine === cleanedTargetLine) {
+    return cleanedTargetLine;
   }
-
   return '';
 };
 
@@ -54,7 +44,7 @@ const splitSubtitleByPunctuation = (
     if (!PUNCTUATIONS.includes(char) && txt.length < maxWidth) {
       txt += char;
     } else {
-      result.push(txt.trim());
+      result.push(txt.replace(/[\s\u3000]+/g, ' ').trim());
       txt = '';
     }
   }
@@ -79,6 +69,10 @@ const resetScriptLinesContent = (
       }
     }
   }
+};
+
+const normalizeWhitespace = (text: string): string => {
+  return text.replace(/[\s\u3000]+/g, ' ').trim();
 };
 
 const addPunctuationToParagraph = (text: string) => {
@@ -114,6 +108,7 @@ const addPunctuationToParagraph = (text: string) => {
 export {
   isLineEqual,
   getEqualedLine,
+  normalizeWhitespace,
   resetScriptLinesContent,
   addPunctuationToParagraph,
   splitSubtitleByPunctuation,
