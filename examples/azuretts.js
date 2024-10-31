@@ -13,7 +13,7 @@ generateVideo(
     bgMusic: path.join(__dirname, './assets/songs/m3.mp3'),
     output: path.join(__dirname, './output'),
     azureTTSSettings: {
-      subscriptionKey: '3d1ec706670245c39d791fa04f6bd3c0',
+      subscriptionKey: '*',
       serviceRegion: 'southeastasia',
     },
     removeCache: false,
