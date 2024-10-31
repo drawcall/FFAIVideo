@@ -15,6 +15,8 @@ generateVideo(
     termsNum: 8,
     subtitleMaxWidth: 9,
     videoClipDuration: 10,
+    // error WSServerHandshakeError: 403
+    // https://github.com/rany2/edge-tts/issues/290
     voiceName: 'zh-CN-XiaoxiaoNeural',
     fontSize: 16,
     textColor: '#ffffff',
