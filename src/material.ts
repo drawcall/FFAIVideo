@@ -5,7 +5,7 @@ import axios from 'axios';
 import { isEmpty, sample } from 'lodash';
 import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
-import { toResolution } from './utils/video-aspect';
+import { toResolution } from './config/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
 import { writeFileWithStream, copyLocalFile } from './utils/file';
 import { appequal } from './utils/utils';

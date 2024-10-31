@@ -2,7 +2,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import { setFFPath } from './utils/ffmpeg';
 import { VideoConfig } from './config/config';
 import { VideoAspect } from './config/constant';
-import { toResolution } from './utils/video-aspect';
+import { toResolution } from './config/video-aspect';
 import { getMetadata, runFFmpegCommand } from './utils/ffmpeg';
 import { createSubtitlesFilter } from './utils/filter';
 

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { isEmpty, isArray } from 'lodash';
+import { Root } from './config/root';
 import { progressFun, successFun } from './config/constant';
 import { VideoConfig, mergeConfig, createOutputConfig } from './config/config';
 import { generateTermsWithAI, addPunctuationWithAI } from './terms';
@@ -28,6 +29,8 @@ const generateVideo = async (
     lineSplit = true,
     subtitleMaxWidth = 9999,
   } = config;
+
+  Root.currentConfig = config;
   videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
   videoScript = await addPunctuationWithAI(videoScript, config);
   progress(5);
