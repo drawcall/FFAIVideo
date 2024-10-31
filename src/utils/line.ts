@@ -51,6 +51,15 @@ const splitSubtitleByPunctuation = (
   return result;
 };
 
+function cleanString(sentence: string): string {
+  const punctuationRegex = new RegExp(`^[\\s${PUNCTUATIONS.join('')}]+`, 'g');
+  return sentence.replace(punctuationRegex, '');
+}
+
+function cleanSentences(sentences: string[]): string[] {
+  return sentences.map(cleanString);
+}
+
 const resetScriptLinesContent = (
   scriptLines: string[],
   scriptLinesIndex: number,
@@ -109,6 +118,8 @@ export {
   isLineEqual,
   getEqualedLine,
   normalizeWhitespace,
+  cleanString,
+  cleanSentences,
   resetScriptLinesContent,
   addPunctuationToParagraph,
   splitSubtitleByPunctuation,

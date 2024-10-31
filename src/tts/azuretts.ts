@@ -41,7 +41,7 @@ const azureTTS = async (
     };
 
     synthesizer.wordBoundary = (s, e) => {
-      Logger.log(
+      Logger.nolog(
         `(WordBoundary), Text: ${e.text}, Audio offset: ${
           e.audioOffset / 10000
         }ms duration: ${e.duration / 10000}ms.`,

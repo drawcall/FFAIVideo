@@ -55,7 +55,20 @@ const removeBlankLines = (text: string) => {
     .join('\n');
 };
 
+const addLineBreaks = (lineText: string, subtitleMaxWidth: number) => {
+  let result = '';
+  for (let i = 0; i < lineText.length; i += subtitleMaxWidth) {
+    if (i + subtitleMaxWidth < lineText.length) {
+      result += lineText.slice(i, i + subtitleMaxWidth) + '\\N';
+    } else {
+      result += lineText.slice(i, i + subtitleMaxWidth);
+    }
+  }
+  return result;
+};
+
 export {
+  addLineBreaks,
   removeBlankLines,
   insertStringAt,
   normalizeWhitespace,

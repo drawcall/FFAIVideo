@@ -2,7 +2,6 @@ const PUNCTUATIONS: string[] = [
   '?',
   ',',
   '.',
-  '、',
   ';',
   ':',
   '!',
@@ -15,7 +14,6 @@ const PUNCTUATIONS: string[] = [
   '：',
   '！',
   '...',
-  '……',
 ];
 
 enum VideoAspect {

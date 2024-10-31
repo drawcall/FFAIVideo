@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { isEmpty, isArray } from 'lodash';
 import { progressFun, successFun } from './config/constant';
 import { VideoConfig, mergeConfig, createOutputConfig } from './config/config';
-import { generateTerms } from './llm';
+import { generateTermsWithAI, addPunctuationWithAI } from './terms';
 import { combineFinalVideo } from './video';
 import { fileToSubtitles } from './sub-maker';
 import { generateSubtitle } from './subtitle';
@@ -25,16 +25,17 @@ const generateVideo = async (
     output = '',
     cacheDir = '',
     removeCache = true,
+    lineBreaks = true,
     subtitleMaxWidth = 9999,
   } = config;
-
   videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
+  videoScript = await addPunctuationWithAI(videoScript, config);
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);
   // AI generates Terms based on text content.
   if (isEmpty(videoTerms)) {
-    videoTerms = await generateTerms(videoScript.trim(), config);
+    videoTerms = await generateTermsWithAI(videoScript.trim(), config);
   } else {
     if (typeof videoTerms === 'string') {
       videoTerms = videoTerms.split(/[,，]/).map(term => term.trim());
@@ -66,7 +67,13 @@ const generateVideo = async (
   // Generate subtitles based on audio and text
   const videoDuration = Math.ceil(getAudioDuration(subMaker) + lastTime);
   let subtitleFile = path.join(cacheDir, 'subtitle.srt');
-  await generateSubtitle(subMaker, videoScript, subtitleFile, subtitleMaxWidth);
+  await generateSubtitle({
+    subMaker,
+    videoScript,
+    subtitleFile,
+    subtitleMaxWidth,
+    lineBreaks,
+  });
   if (!fs.exists(subtitleFile)) {
     Logger.warn('subtitle file not found, fallback to whisper');
   }

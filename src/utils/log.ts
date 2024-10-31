@@ -1,6 +1,11 @@
 const Logger = {
   enabled: false,
 
+  nolog(...o: any[]) {
+    if (this.enabled) {
+    }
+  },
+
   log(...o: any[]) {
     if (this.enabled) {
       o.unshift('FFlog:');

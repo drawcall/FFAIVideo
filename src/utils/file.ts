@@ -49,7 +49,7 @@ const writeSubtitles = async (
       Logger.log(`Subtitle synthesis successful. ${formattedSubtitles.length}`);
     } else {
       Logger.log(
-        `Sorry, getEqualedLine no vocabulary equaled. ${formattedSubtitles.length}`,
+        `Sorry, getEqualedLine no vocabulary equaled. formattedSubtitles.length ${formattedSubtitles.length}`,
       );
       await fs.writeFile(subtitleFile, '', { encoding: 'utf-8' });
     }
