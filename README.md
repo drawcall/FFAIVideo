@@ -107,6 +107,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | videoTerms | string \| string[] | - | Keywords for generating videos |
 | videoAspect | VideoAspect | undefined | Video aspect ratio, can be undefined by default |
 | videoClipDuration | number | 5 | Video clip duration, default is 5 seconds |
+| lineSplit | boolean | true | Use line breaks to split long subtitles |
 | termsNum | number | 5 | Number of keywords |
 | output | string | - | Output path |
 | cacheDir | string | - | Cache directory |
@@ -124,6 +125,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | subtitleMaxWidth | number | - | Maximum subtitle width |
 | debug | boolean | false | Debug mode |
 | lastTime | number | 5 | Last time |
+| azureTTSSettings | object | null | Azure TTS settings |
 | materialFunc | function | null | A custom material synthesis |
 | removeCache | boolean | true | Whether to remove cache |
 
