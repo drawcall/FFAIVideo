@@ -3,12 +3,8 @@ import { setFFPath } from './utils/ffmpeg';
 import { VideoConfig } from './config/config';
 import { VideoAspect } from './config/constant';
 import { toResolution } from './utils/video-aspect';
-import {
-  getMetadata,
-  runFFmpegCommand,
-  convertFiltersToString,
-} from './utils/ffmpeg';
-import { convertHexToAssColor } from './utils/utils';
+import { getMetadata, runFFmpegCommand } from './utils/ffmpeg';
+import { createSubtitlesFilter } from './utils/filter';
 
 const combineFinalVideo = async (
   videoDuration: number,
@@ -23,13 +19,6 @@ const combineFinalVideo = async (
     bgMusic = '',
     voiceVolume = 1,
     bgMusicVolume = 0.5,
-    fontSize,
-    fontsDir = '',
-    fontName = '',
-    textColor,
-    strokeColor,
-    strokeWidth,
-    textBottom,
     output,
   } = config;
   const clips = await processingSubVideos(
@@ -54,21 +43,8 @@ const combineFinalVideo = async (
     `[${clips.length}:a]volume=${voiceVolume}[audio]`,
     `[${clips.length + 1}:a]volume=${bgMusicVolume}[bg]`,
     `[audio][bg]amix=inputs=2[a]`,
-    `[v]subtitles=${subtitleFile}[v]`,
+    createSubtitlesFilter(subtitleFile, config),
   ];
-  if (fontsDir || fontName) {
-    const str = convertFiltersToString({
-      fontsdir: fontsDir,
-      fontname: fontName,
-      fontsize: fontSize,
-      fontcolor: convertHexToAssColor(textColor || ''),
-      bordercolor: convertHexToAssColor(strokeColor || ''),
-      borderw: strokeWidth,
-      y: textBottom,
-    });
-    const subtitle = filters[filters.length - 1];
-    filters[filters.length - 1] = subtitle.replace(/\[v\]$/g, `:${str}[v]`);
-  }
 
   command.outputOptions([
     '-filter_complex',

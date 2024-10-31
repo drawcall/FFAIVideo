@@ -79,33 +79,4 @@ const runFFmpegCommand = (command: ffmpeg.FfmpegCommand) => {
   });
 };
 
-function convertFiltersToString(filterObj: any) {
-  const {
-    fontsdir,
-    fontname,
-    fontsize,
-    fontcolor,
-    bordercolor,
-    borderw,
-    x,
-    y,
-  } = filterObj;
-
-  const filterParams = [
-    `FontName=${fontname}`,
-    `FontSize=${fontsize}`,
-    `PrimaryColour=${fontcolor}`,
-    `OutlineColour=${bordercolor}`,
-    `OutlineWidth=${borderw}`,
-    `Alignment=2`,
-    `MarginV=${y}`,
-  ];
-
-  let filterStr= `force_style='${filterParams.join(',')}'`;
-  if(fontsdir) {
-    filterStr = `fontsdir=${fontsdir}:${filterStr}`;
-  }
-  return filterStr;
-}
-
-export { getMetadata, runFFmpegCommand, setFFPath, convertFiltersToString };
+export { getMetadata, runFFmpegCommand, setFFPath };
