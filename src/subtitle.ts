@@ -1,7 +1,7 @@
 import { clone } from 'lodash';
 import { SubMaker } from './sub-maker';
 import { formatter } from './utils/date';
-import { PUNCTUATIONS } from './config/constant';
+import { TINY_PUNCTUATIONS } from './config/constant';
 import {
   addLineBreaks,
   normalizeWhitespace,
@@ -42,7 +42,7 @@ const generateSubtitle = async ({
   } else {
     scriptLinesc = restructureScriptLines(subMaker, subtitleMaxWidth);
   }
-  console.log(scriptLinesc);
+  // console.log(scriptLinesc);
 
   for (let i = 0; i < subMaker.offset.length; i++) {
     let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
@@ -96,7 +96,7 @@ const restructureScriptLines = (
     oldSubLine = subLine;
     subLine += sub;
 
-    if (PUNCTUATIONS.includes(sub)) {
+    if (TINY_PUNCTUATIONS.includes(sub)) {
       scriptLinesc.push(subLine);
       subLine = '';
       continue;

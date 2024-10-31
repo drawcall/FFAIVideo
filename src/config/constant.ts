@@ -16,6 +16,10 @@ const PUNCTUATIONS: string[] = [
   '...',
 ];
 
+const TINY_PUNCTUATIONS = PUNCTUATIONS.filter(
+  punctuation => !['、', ':', '：'].includes(punctuation),
+);
+
 enum VideoAspect {
   Landscape = '16:9',
   Portrait = '9:16',
@@ -30,4 +34,11 @@ enum VideoConcatMode {
 const progressFun = (p: number) => {};
 const successFun = (r: string) => {};
 
-export { VideoAspect, VideoConcatMode, progressFun, successFun, PUNCTUATIONS };
+export {
+  TINY_PUNCTUATIONS,
+  VideoAspect,
+  VideoConcatMode,
+  progressFun,
+  successFun,
+  PUNCTUATIONS,
+};
