@@ -31,8 +31,8 @@ const { generateVideo } = require('ffaivideo');
 
 generateVideo(
   {
-    provider: 'g4f',
-    // Use the free g4f, or OpenAI, or Moonshot account
+    provider: 'gpt4js',
+    // Use the free gpt4js/g4f, or OpenAI, or Moonshot account
     // provider: 'openai',
     // openai: {
     //   apiKey: 'xxx',

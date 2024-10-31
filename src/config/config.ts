@@ -5,6 +5,12 @@ import { VideoAspect } from './constant';
 import { isFilePath } from '../utils/file';
 import { uuid } from '../utils/utils';
 
+interface AzureTTSSettings {
+  subscriptionKey: string;
+  serviceRegion: string;
+  language?: string;
+}
+
 interface MaterialSite {
   apiKey: string;
   host?: string;
@@ -48,6 +54,7 @@ interface VideoConfig {
   voiceVolume?: number; // Default is 1.0
   bgMusic?: string;
   bgMusicVolume?: number; // Default is 0.2
+  azureTTSSettings?: AzureTTSSettings;
 
   fontsDir?: string;
   fontSize?: number;
@@ -60,6 +67,7 @@ interface VideoConfig {
   debug?: boolean;
   lastTime?: number;
   removeCache?: boolean;
+  ttsProxy?: string;
 
   materialFunc?: (param: SearchParams) => Promise<any[]>;
   insertClips?: InsertClip[];
@@ -132,6 +140,7 @@ const createOutputConfig = (config: VideoConfig): VideoConfig => {
 export {
   VideoConfig,
   LLMConfig,
+  AzureTTSSettings,
   MaterialSite,
   mergeConfig,
   createOutputConfig,

@@ -59,7 +59,7 @@ const generateVideo = async (
 
   // Generate voiceover by tts engine.
   const audioFile = path.join(cacheDir, 'audio.mp3');
-  const subMaker = await tts(videoScript, voiceName, audioFile);
+  const subMaker = await tts(videoScript, voiceName, audioFile, config);
   if (!subMaker) return '';
   progress(30);
 

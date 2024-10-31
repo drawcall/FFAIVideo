@@ -1,7 +1,7 @@
-import fs from 'fs-extra';
-import { MsEdgeTTS } from 'edge-tts-node';
 import { SubMaker } from './sub-maker';
-import { Logger } from './utils/log';
+import { azureTTS } from './tts/azuretts';
+import { edgeTTS } from './tts/edgetts';
+import { VideoConfig } from './config/config';
 
 const parseVoiceName = (name: string): string => {
   return name.replace('-Female', '').replace('-Male', '').trim();
@@ -11,50 +11,15 @@ const tts = async (
   text: string,
   voiceName: string,
   voiceFile: string,
+  config: VideoConfig,
 ): Promise<SubMaker | null> => {
-  text = text.trim();
-  MsEdgeTTS.wordBoundaryEnabled = true;
-  try {
-    let edgeTTS = new MsEdgeTTS(undefined, false);
-    console.log(voiceName,MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
-    await edgeTTS.setMetadata(
-      voiceName,
-      MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,
-    );
-    const subMaker = new SubMaker();
+  const { ttsProxy = '', azureTTSSettings } = config;
 
-    await new Promise((resolve, reject) => {
-      edgeTTS
-        .toStream(text)
-        .on('data', chunk => {
-          const message = chunk.toString();
-          const obj = JSON.parse(message);
-          if (obj.type === 'audio') {
-            fs.appendFileSync(voiceFile, Buffer.from(obj.data, 'base64'));
-          } else if (obj.type === 'WordBoundary') {
-            subMaker.createSub([obj.offset, obj.duration], obj.text);
-          }
-        })
-        .on('end', () => {
-          //file.end();
-          resolve(voiceFile);
-        })
-        .on('error', () => {
-          //file.end();
-          reject();
-        });
-    });
-
-    if (!subMaker || !subMaker.subs) {
-      Logger.log(`failed, subMaker is None or subMaker.subs is None`);
-    }
-
-    Logger.log(`voice output file: ${voiceFile}`);
-    return subMaker;
-  } catch (e) {
-    Logger.error(`voice failed, error: ${e}`);
+  if (azureTTSSettings) {
+    return await azureTTS(text, voiceName, voiceFile, azureTTSSettings);
   }
-  return null;
+
+  return await edgeTTS(text, voiceName, voiceFile, ttsProxy);
 };
 
 const getAudioDuration = (subMaker: SubMaker): number => {

@@ -24,7 +24,8 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "test": "NODE_ENV=test jest",
     "clean": "rimraf ./examples/output",
-    "example": "npm run clean && npm run build && node ./examples/simple"
+    "example": "npm run clean && npm run build && node ./examples/simple",
+    "tts": "npm run clean && npm run build && node ./examples/azuretts"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -37,8 +38,10 @@
     "fs-extra": "^11.2.0",
     "g4f": "^1.4.3",
     "gpt4js": "^1.7.8",
+    "https-proxy-agent": "^7.0.5",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.38.0",
     "openai": "^4.37.1",
     "uuid": "^9.0.1"
   },
