@@ -84,7 +84,7 @@ const defaultPexels: MaterialSite = {
 
 // A default VideoConfig for basic configuration
 const defalutVideoConfig: VideoConfig = {
-  provider: 'g4f',
+  provider: 'gpt4js',
   pexels: defaultPexels,
   output: '',
   cacheDir: '',
@@ -109,7 +109,7 @@ const defalutVideoConfig: VideoConfig = {
 // Merge your config and the default config
 const mergeConfig = (config: VideoConfig): VideoConfig => {
   const fconfig = merge(defalutVideoConfig, config);
-  fconfig.provider = fconfig.provider ?? 'g4f';
+  fconfig.provider = fconfig.provider ?? 'gpt4js';
   fconfig[fconfig.provider] = merge(
     defaultLLMConfig[fconfig.provider],
     fconfig[fconfig.provider],

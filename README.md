@@ -101,6 +101,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | azure | LLMConfig | - | Azure configuration |
 | gemini | LLMConfig | - | Gemini configuration |
 | g4f | LLMConfig | - | G4F configuration |
+| gpt4js | LLMConfig | - | GPT4js simplifies AI model interaction |
 | customoAI | LLMConfig | - | custom ai configuration |
 | pexels | MaterialSite | - | Pexels material site |
 | videoScript | string | - | Script for generating videos |
