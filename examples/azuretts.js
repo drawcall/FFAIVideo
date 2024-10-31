@@ -12,6 +12,8 @@ generateVideo(
     voiceName: 'zh-CN-XiaoxiaoNeural',
     bgMusic: path.join(__dirname, './assets/songs/m3.mp3'),
     output: path.join(__dirname, './output'),
+    // https://azure.microsoft.com/en-us/products/ai-services/ai-speech
+    // https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account?icid=AI-Speech-Hero
     azureTTSSettings: {
       subscriptionKey: '*',
       serviceRegion: 'southeastasia',
