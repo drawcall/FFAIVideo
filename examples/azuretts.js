@@ -8,7 +8,7 @@ generateVideo(
     termsNum: 6,
     subtitleMaxWidth: 9,
     videoClipDuration: 10,
-    lineBreaks: false,
+    lineSplit: true,
     voiceName: 'zh-CN-XiaoxiaoNeural',
     bgMusic: path.join(__dirname, './assets/songs/m3.mp3'),
     output: path.join(__dirname, './output'),

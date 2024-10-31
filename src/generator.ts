@@ -25,7 +25,7 @@ const generateVideo = async (
     output = '',
     cacheDir = '',
     removeCache = true,
-    lineBreaks = true,
+    lineSplit = true,
     subtitleMaxWidth = 9999,
   } = config;
   videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
@@ -72,7 +72,7 @@ const generateVideo = async (
     videoScript,
     subtitleFile,
     subtitleMaxWidth,
-    lineBreaks,
+    lineSplit,
   });
   if (!fs.exists(subtitleFile)) {
     Logger.warn('subtitle file not found, fallback to whisper');

@@ -19,13 +19,13 @@ const generateSubtitle = async ({
   videoScript,
   subtitleFile,
   subtitleMaxWidth,
-  lineBreaks,
+  lineSplit,
 }: {
   subMaker: SubMaker;
   videoScript: string;
   subtitleFile: string;
   subtitleMaxWidth: number;
-  lineBreaks: boolean;
+  lineSplit: boolean;
 }): Promise<void> => {
   const formattedSubtitles: string[] = [];
   let scriptLines = cleanSentences(
@@ -37,10 +37,10 @@ const generateSubtitle = async ({
   let subLine = '';
 
   let scriptLinesc;
-  if (lineBreaks) {
-    scriptLinesc = clone(scriptLines);
-  } else {
+  if (lineSplit) {
     scriptLinesc = restructureScriptLines(subMaker, subtitleMaxWidth);
+  } else {
+    scriptLinesc = clone(scriptLines);
   }
   // console.log(scriptLinesc);
 
@@ -61,10 +61,10 @@ const generateSubtitle = async ({
     // create new subtitle
     if (lineText) {
       scriptLinesIndex++;
-      if (lineBreaks) {
-        lineText = addLineBreaks(lineText, subtitleMaxWidth);
-      } else {
+      if (lineSplit) {
         lineText = addLineBreaks(lineText, subtitleMaxWidth + 4);
+      } else {
+        lineText = addLineBreaks(lineText, subtitleMaxWidth);
       }
       const subtitle = formatter(
         scriptLinesIndex,
