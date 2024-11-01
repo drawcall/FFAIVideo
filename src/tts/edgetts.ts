@@ -14,7 +14,7 @@ const edgeTTS = async (
   MsEdgeTTS.wordBoundaryEnabled = true;
   try {
     const agent = ttsProxy ? new HttpsProxyAgent(ttsProxy) : undefined;
-    const edgeTTS = new MsEdgeTTS({ agent, enableLogger: false });
+    const edgeTTS = new MsEdgeTTS({ agent, enableLogger: Logger.enabled });
     await edgeTTS.setMetadata(
       voiceName,
       MsEdgeTTS.OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3,

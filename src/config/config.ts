@@ -56,6 +56,7 @@ interface VideoConfig {
   bgMusicVolume?: number; // Default is 0.2
   azureTTSSettings?: AzureTTSSettings;
   lineSplit?: boolean;
+  addPunctuation?: boolean;
 
   fontsDir?: string;
   fontSize?: number;
@@ -90,6 +91,7 @@ const defalutVideoConfig: VideoConfig = {
   cacheDir: '',
   debug: false,
   lineSplit: true,
+  addPunctuation: false,
   termsNum: 5,
   subtitleMaxWidth: 9999,
   lastTime: 5,

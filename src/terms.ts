@@ -74,7 +74,7 @@ const addPunctuationWithAI = async (
 
 ## Output Format:
 {
-  "processedText": "The processed text with proper punctuation"
+  "processedText": "这里是文字结果"
 }
 
 ## Context:

@@ -27,12 +27,16 @@ const generateVideo = async (
     cacheDir = '',
     removeCache = true,
     lineSplit = true,
+    addPunctuation = false,
     subtitleMaxWidth = 9999,
   } = config;
 
   Root.currentConfig = config;
   videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
-  videoScript = await addPunctuationWithAI(videoScript, config);
+  if (addPunctuation) {
+    videoScript = await addPunctuationWithAI(videoScript, config);
+  }
+  
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);

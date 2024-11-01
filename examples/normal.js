@@ -12,6 +12,10 @@ generateVideo(
     //   apiKey: 'xxxxxxxx',
     //   modelName: 'moonshot-v1-8k',
     // },
+    azureTTSSettings: {
+      subscriptionKey: '*',
+      serviceRegion: 'southeastasia',
+    },
     termsNum: 8,
     subtitleMaxWidth: 9,
     videoClipDuration: 10,
