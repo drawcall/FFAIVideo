@@ -32,12 +32,13 @@ const { generateVideo } = require('ffaivideo');
 generateVideo(
   {
     provider: 'gpt4js',
-    // Use the free gpt4js/g4f, or OpenAI, or Moonshot account
+    // Use the free gpt4js, g4f, or OpenAI, or Moonshot account
+    // Or use openai gpt
     // provider: 'openai',
     // openai: {
-    //   apiKey: 'xxx',
-    //   modelName: 'xxx',
-    //   baseUrl: 'xxx',
+    //   apiKey: '*',
+    //   modelName: 'gpt-4-turbo-preview',
+    //   baseUrl: 'https://api.openai.com/v1',
     // },
     termsNum: 8,
     subtitleMaxWidth: 9,
@@ -83,7 +84,16 @@ openai: {
 The video resources of this project use the [Pexels](https://www.pexels.com) website. Please visit [https://www.pexels.com/api/new/](https://www.pexels.com/api/new/) and follow the instructions to apply for a new API key so that you can use the rich materials provided by Pexels in your project.
 
 #### About voice tts
-FFAIVideo integrates Microsoft [Edge's online text-to-speech](https://azure.microsoft.com/en-us/products/ai-services/text-to-speech) service, powered by Microsoft Azure. Furthermore, it enables users to customize and set up their own app tokens for more flexible configuration and utilization of this service. As for the various voice options available for setup, you can find a detailed list in the following file within the GitHub repository: [https://github.com/drawcall/FFAIVideo/blob/main/src/config/voice-config.ts](https://github.com/drawcall/FFAIVideo/blob/main/src/config/voice-config.ts). This way, you can select the most suitable voice according to your specific needs.
+FFAIVideo by default integrates Microsoft Edge's online text-to-speech service. This service is not only powerful but also allows users to customize and set up their own application tokens, offering more flexible configuration and usage options.
+However, users in China may encounter access restrictions. For more details, please refer to this GitHub issue: https://github.com/rany2/edge-tts/issues/290.
+To address this issue, we provide an alternative: you can use the Azure TTS service. This requires purchasing an Azure AI Speech service account. For more information, please visit: https://azure.microsoft.com/en-us/products/ai-services/ai-speech.
+When using the Azure TTS service, a configuration example is as follows:
+```
+azureTTSSettings: {
+  subscriptionKey: '*',
+  serviceRegion: '*',
+},
+```
 
 #### About installing ffmpeg
 Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you install a standard, well-maintained version of FFmpeg. This will ensure that FFAIVideo operates smoothly and without any compatibility issues.
@@ -95,7 +105,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 ## API Configuration
 | Parameter name | Type | Default value | Description |
 |--------|------|--------|------|
-| provider | string | g4f | LLM Provider |
+| provider | string | gpt4js | LLM Provider |
 | moonshot | LLMConfig | - | Moonshot configuration |
 | openai | LLMConfig | - | OpenAI configuration |
 | azure | LLMConfig | - | Azure configuration |
