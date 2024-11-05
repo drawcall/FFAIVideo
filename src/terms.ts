@@ -27,7 +27,7 @@ Generate ${termsNum} search terms for stock videos, depending on the subject of 
 ### Video Script
 ${videoScript}
 `.trim();
-  const response = await callAIInterface(prompt, config);
+  let response = await callAIInterface(prompt, config);
   const searchTerms: string[] = [];
 
   try {
@@ -40,6 +40,7 @@ ${videoScript}
     }
     searchTerms.push(...parsedResponse);
   } catch (error) {
+    response = response || '';
     const match = response.match(/\["(?:[^"\\]|\\.)*"(?:,\s*"[^"\\]*")*\]/);
     if (match) {
       try {

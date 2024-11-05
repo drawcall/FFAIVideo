@@ -133,7 +133,6 @@ const downloadVideos = async (
       const [a, b, c] = getSampleItems(videoItems, 3);
       materialVideos = insertTriplet(materialVideos, a, b, c);
     }
-    console.log(materialVideos);
   }
 
   const videoPaths: string[] = [];
