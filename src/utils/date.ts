@@ -2,10 +2,13 @@ const mktimestamp = (time_unit: number) => {
   const hour = Math.floor(time_unit / 10 ** 7 / 3600);
   const minute = Math.floor((time_unit / 10 ** 7 / 60) % 60);
   const seconds = (time_unit / 10 ** 7) % 60;
-  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${seconds.toFixed(3).padStart(6, '0')}`;
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(
+    2,
+    '0',
+  )}:${seconds.toFixed(3).padStart(6, '0')}`;
 };
 
-const formatter = (
+const subtitleFormatter = (
   timeid: number,
   startTime: number,
   endTime: number,
@@ -13,7 +16,8 @@ const formatter = (
 ): string => {
   const startT = mktimestamp(startTime).replace('.', ',');
   const endT = mktimestamp(endTime).replace('.', ',');
-  return `${timeid}\n${startT} --> ${endT}\n${subText}\n`;
+  const removeSpecialCharacters = subText.replace(/[，。！？,.!?…]$/, '');
+  return `${timeid}\n${startT} --> ${endT}\n${removeSpecialCharacters}\n`;
 };
 
-export { mktimestamp, formatter };
+export { mktimestamp, subtitleFormatter };

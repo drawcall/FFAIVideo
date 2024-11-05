@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import md5 from 'md5';
 import path from 'path';
 import axios from 'axios';
-import { isEmpty, sample } from 'lodash';
+import { isEmpty } from 'lodash';
 import { VideoAspect } from './config/constant';
 import { VideoConfig } from './config/config';
 import { toResolution } from './config/video-aspect';
@@ -12,7 +12,7 @@ import { appequal } from './utils/utils';
 import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
-import { uuid } from './utils/utils';
+import { uuid, insertTriplet, getSampleItems } from './utils/utils';
 import { isNetUrl } from './utils/http';
 
 interface MaterialInfo {
@@ -111,7 +111,7 @@ const downloadVideos = async (
   progress: (progress: number) => void,
 ): Promise<string[]> => {
   const { videoClipDuration: maxClipDuration = 5 } = config;
-  let validVideoItems: MaterialInfo[] = [];
+  let materialVideos: MaterialInfo[] = [];
 
   for (const [index, searchTerm] of searchTerms.entries()) {
     let videoItems = [];
@@ -130,16 +130,16 @@ const downloadVideos = async (
     }
 
     if (videoItems.length > 0) {
-      const randomItem = sample(videoItems);
-      validVideoItems.push(randomItem);
+      const [a, b, c] = getSampleItems(videoItems, 3);
+      materialVideos = insertTriplet(materialVideos, a, b, c);
     }
+    console.log(materialVideos);
   }
-  validVideoItems = validVideoItems.concat(validVideoItems);
 
   const videoPaths: string[] = [];
   let totalDuration = 0.0;
   let index = 0;
-  for (const item of validVideoItems) {
+  for (const item of materialVideos) {
     try {
       index++;
       let savedVideoPath;
@@ -149,7 +149,7 @@ const downloadVideos = async (
         savedVideoPath = await copyLocalFile(item.url, cacheDir);
       }
 
-      progress(40 + Math.floor((index * 45) / validVideoItems.length));
+      progress(40 + Math.floor((index * 45) / materialVideos.length));
       if (savedVideoPath) {
         videoPaths.push(savedVideoPath);
         const seconds = Math.min(maxClipDuration, item.duration);
