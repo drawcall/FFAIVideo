@@ -15,7 +15,7 @@ generateVideo(
     // https://azure.microsoft.com/en-us/products/ai-services/ai-speech
     // https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account?icid=AI-Speech-Hero
     azureTTSSettings: {
-      subscriptionKey: '*',
+      subscriptionKey: 'your azure key',
       serviceRegion: 'southeastasia',
     },
     removeCache: false,

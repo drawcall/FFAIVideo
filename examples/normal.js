@@ -13,7 +13,7 @@ generateVideo(
     //   modelName: 'moonshot-v1-8k',
     // },
     azureTTSSettings: {
-      subscriptionKey: '*',
+      subscriptionKey: 'your azure key',
       serviceRegion: 'southeastasia',
     },
     termsNum: 8,
