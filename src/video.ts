@@ -74,7 +74,7 @@ const processingSubVideos = async (
   config: VideoConfig,
 ): Promise<string[]> => {
   const {
-    videoClipDuration: maxClipDuration = 5,
+    videoClipDuration: maxClipDuration = 10,
     videoAspect = VideoAspect.Portrait,
   } = config;
   const [videoWidth, videoHeight] = toResolution(videoAspect);

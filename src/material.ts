@@ -32,7 +32,7 @@ const searchVideos = async (
   const [videoWidth, videoHeight] = toResolution(videoAspect);
   const searchData = {
     query: searchTerm,
-    per_page: '15',
+    per_page: '20',
     orientation: videoOrientation,
   };
   const queryUrl = `https://api.pexels.com/videos/search`;
@@ -110,7 +110,7 @@ const downloadVideos = async (
   config: VideoConfig,
   progress: (progress: number) => void,
 ): Promise<string[]> => {
-  const { videoClipDuration: maxClipDuration = 5 } = config;
+  const { videoClipDuration: maxClipDuration = 10 } = config;
   let materialVideos: MaterialInfo[] = [];
 
   for (const [index, searchTerm] of searchTerms.entries()) {
@@ -134,6 +134,7 @@ const downloadVideos = async (
       materialVideos = insertTriplet(materialVideos, a, b, c);
     }
   }
+  Logger.log(`materialVideos ${JSON.stringify(materialVideos)}`);
 
   const videoPaths: string[] = [];
   let totalDuration = 0.0;
