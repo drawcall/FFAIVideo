@@ -67,7 +67,11 @@ const uuid = (length: number = -1): string => {
 };
 
 const greater = (a: number, b: number) => {
-  return a > b;
+  return a >= b;
+};
+
+const less = (a: number, b: number) => {
+  return a < b;
 };
 
 const convertHexToAssColor = (hexColor: string): string => {
@@ -104,6 +108,7 @@ const getSampleItems = (items: any[], count: number) => {
 
 export {
   uuid,
+  less,
   greater,
   insertTriplet,
   getSampleItems,

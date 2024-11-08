@@ -8,7 +8,7 @@ import { VideoConfig } from './config/config';
 import { toResolution } from './config/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
 import { writeFileWithStream, copyLocalFile } from './utils/file';
-import { greater } from './utils/utils';
+import { less } from './utils/utils';
 import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
@@ -56,19 +56,27 @@ const searchVideos = async (
     }
 
     const videoFiles = video['video_files'];
+    let minWidth = 99999;
+    let minHeight = 99999;
+    let selectedItem = null;
     for (const file of videoFiles) {
       const w = parseInt(file['width']);
       const h = parseInt(file['height']);
-      if (greater(w, videoWidth) && greater(h, videoHeight)) {
-        const item = {
+      if (less(w, videoWidth) || less(h, videoHeight)) continue;
+      if (w < minWidth || h < minHeight) {
+        minWidth = w;
+        minHeight = h;
+        selectedItem = {
           provider: 'pexels',
           keyword: searchTerm,
           url: file['link'],
           duration: duration,
         };
-        videoItems.push(item);
-        break;
       }
+    }
+
+    if (selectedItem) {
+      videoItems.push(selectedItem);
     }
   }
   return videoItems;
