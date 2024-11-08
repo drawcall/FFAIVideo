@@ -8,7 +8,7 @@ import { VideoConfig } from './config/config';
 import { toResolution } from './config/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
 import { writeFileWithStream, copyLocalFile } from './utils/file';
-import { appequal } from './utils/utils';
+import { greater } from './utils/utils';
 import { httpGet, buildApiUrl } from './utils/http';
 import { toJson } from './utils/json';
 import { Logger } from './utils/log';
@@ -33,7 +33,7 @@ const searchVideos = async (
   const searchData = {
     query: searchTerm,
     per_page: '20',
-    orientation: videoOrientation,
+    orientation: videoOrientation.toLocaleLowerCase(),
   };
   const queryUrl = `https://api.pexels.com/videos/search`;
   const data = await httpGet(
@@ -56,19 +56,20 @@ const searchVideos = async (
     }
 
     const videoFiles = video['video_files'];
+    let count = 0;
     for (const file of videoFiles) {
       const w = parseInt(file['width']);
       const h = parseInt(file['height']);
-      const n = 10;
-      if (appequal(w, videoWidth, n) && appequal(h, videoHeight, n)) {
-        const item: MaterialInfo = {
+      if (greater(w, videoWidth) && greater(h, videoHeight)) {
+        const item = {
           provider: 'pexels',
           keyword: searchTerm,
           url: file['link'],
           duration: duration,
         };
         videoItems.push(item);
-        break;
+        count++;
+        if (count >= 5) break;
       }
     }
   }
@@ -134,7 +135,7 @@ const downloadVideos = async (
       materialVideos = insertTriplet(materialVideos, a, b, c);
     }
   }
-  Logger.log(`materialVideos ${JSON.stringify(materialVideos)}`);
+  // Logger.log(`materialVideos ${JSON.stringify(materialVideos)}`);
 
   const videoPaths: string[] = [];
   let totalDuration = 0.0;

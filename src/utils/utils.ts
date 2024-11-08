@@ -66,8 +66,8 @@ const uuid = (length: number = -1): string => {
   return u;
 };
 
-const appequal = (a: number, b: number, c: number = 10) => {
-  return Math.abs(a - b) < c;
+const greater = (a: number, b: number) => {
+  return a > b;
 };
 
 const convertHexToAssColor = (hexColor: string): string => {
@@ -94,7 +94,7 @@ const insertTriplet = (arr: any[], a: any, b: any, c: any) => {
 
 const getSampleItems = (items: any[], count: number) => {
   if (items.length === 0) return items;
-  
+
   let randoms = sampleSize(items, count);
   while (randoms.length < count) {
     randoms = randoms.concat(sample(items));
@@ -104,7 +104,7 @@ const getSampleItems = (items: any[], count: number) => {
 
 export {
   uuid,
-  appequal,
+  greater,
   insertTriplet,
   getSampleItems,
   getEnumKeyByValue,
