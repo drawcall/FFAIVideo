@@ -71,7 +71,7 @@ interface VideoConfig {
   removeCache?: boolean;
   ttsProxy?: string;
 
-  materialFunc?: (param: SearchParams) => Promise<any[]>;
+  getMaterial?: (param: SearchParams) => Promise<any[]>;
   insertClips?: InsertClip[];
   [key: string]: any;
 }

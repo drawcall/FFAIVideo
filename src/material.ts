@@ -56,7 +56,6 @@ const searchVideos = async (
     }
 
     const videoFiles = video['video_files'];
-    let count = 0;
     for (const file of videoFiles) {
       const w = parseInt(file['width']);
       const h = parseInt(file['height']);
@@ -68,8 +67,7 @@ const searchVideos = async (
           duration: duration,
         };
         videoItems.push(item);
-        count++;
-        if (count >= 5) break;
+        break;
       }
     }
   }
@@ -116,8 +114,8 @@ const downloadVideos = async (
 
   for (const [index, searchTerm] of searchTerms.entries()) {
     let videoItems = [];
-    if (config.materialFunc) {
-      videoItems = await config.materialFunc({
+    if (config.getMaterial) {
+      videoItems = await config.getMaterial({
         searchTerm,
         index,
         maxClipDuration,
