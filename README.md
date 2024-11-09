@@ -137,7 +137,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | debug | boolean | false | Debug mode |
 | lastTime | number | 5 | Last time |
 | azureTTSSettings | object | null | Azure TTS settings |
-| materialFunc | function | null | A custom material synthesis |
+| getMaterial | function | null | A custom material synthesis |
 | removeCache | boolean | true | Whether to remove cache |
 
 ## Reference Project
