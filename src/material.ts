@@ -138,8 +138,7 @@ const downloadVideos = async (
   if (config.postProcessMaterialVideos) {
     materialVideos = config.postProcessMaterialVideos(materialVideos);
   }
-  // Logger.log(`materialVideos ${JSON.stringify(materialVideos)}`);
-
+  
   const videoPaths: string[] = [];
   let totalDuration = 0.0;
   let index = 0;
