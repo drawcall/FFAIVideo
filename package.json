@@ -1,6 +1,6 @@
 {
   "name": "ffaivideo",
-  "version": "1.7.7",
+  "version": "1.7.9",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

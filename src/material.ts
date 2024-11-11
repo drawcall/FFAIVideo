@@ -4,7 +4,7 @@ import path from 'path';
 import axios from 'axios';
 import { isEmpty } from 'lodash';
 import { VideoAspect } from './config/constant';
-import { VideoConfig } from './config/config';
+import { VideoConfig, MaterialInfo } from './config/config';
 import { toResolution } from './config/video-aspect';
 import { getEnumKeyByValue } from './utils/utils';
 import { writeFileWithStream, copyLocalFile } from './utils/file';
@@ -14,13 +14,6 @@ import { toJson } from './utils/json';
 import { Logger } from './utils/log';
 import { uuid, insertTriplet, getSampleItems } from './utils/utils';
 import { isNetUrl } from './utils/http';
-
-interface MaterialInfo {
-  provider: string;
-  url: string;
-  keyword?: string;
-  duration: number;
-}
 
 const searchVideos = async (
   searchTerm: string,
@@ -140,6 +133,10 @@ const downloadVideos = async (
       const [a, b, c] = getSampleItems(videoItems, 3);
       materialVideos = insertTriplet(materialVideos, a, b, c);
     }
+  }
+
+  if (config.postProcessMaterialVideos) {
+    materialVideos = config.postProcessMaterialVideos(materialVideos);
   }
   // Logger.log(`materialVideos ${JSON.stringify(materialVideos)}`);
 
