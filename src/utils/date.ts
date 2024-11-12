@@ -16,7 +16,7 @@ const subtitleFormatter = (
 ): string => {
   const startT = mktimestamp(startTime).replace('.', ',');
   const endT = mktimestamp(endTime).replace('.', ',');
-  const removeSpecialCharacters = subText.replace(/[，。！？,.!?…]$/, '');
+  const removeSpecialCharacters = subText.replace(/^[，。！？,.!?…]+|[，。！？,.!?…]+$/g, '');
   return `${timeid}\n${startT} --> ${endT}\n${removeSpecialCharacters}\n`;
 };
 
