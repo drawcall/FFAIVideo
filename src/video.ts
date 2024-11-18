@@ -1,5 +1,4 @@
 import ffmpeg from 'fluent-ffmpeg';
-import { setFFPath } from './utils/ffmpeg';
 import { VideoConfig } from './config/config';
 import { VideoAspect } from './config/constant';
 import { toResolution } from './config/video-aspect';
@@ -14,7 +13,6 @@ const combineFinalVideo = async (
   config: VideoConfig,
   progress: (progress: number) => void,
 ): Promise<string> => {
-  setFFPath();
   const {
     bgMusic = '',
     voiceVolume = 1,

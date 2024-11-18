@@ -12,6 +12,7 @@ import { downloadVideos, copyClipToCache } from './material';
 import { tts, getAudioDuration, parseVoiceName } from './voice';
 import { addPunctuationToParagraph, normalizeWhitespace } from './utils/line';
 import { Logger } from './utils/log';
+import { setDefaultFFPath } from './utils/ffmpeg';
 
 const generateVideo = async (
   params: VideoConfig,
@@ -36,7 +37,8 @@ const generateVideo = async (
   if (addPunctuation) {
     videoScript = await addPunctuationWithAI(videoScript, config);
   }
-  
+
+  setDefaultFFPath();
   progress(5);
   fs.ensureDir(path.dirname(output));
   fs.ensureDirSync(cacheDir);

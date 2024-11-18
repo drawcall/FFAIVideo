@@ -9,13 +9,13 @@ interface Metadata {
   width: number;
 }
 
-let isPathSet = false;
-const setFFPath = () => {
-  if (isPathSet) return;
+let isFFmpegPathSet = false;
+const setDefaultFFPath = () => {
+  if (isFFmpegPathSet) return;
   try {
     ffmpeg.setFfmpegPath(ffmpegInstaller.path);
     ffmpeg.setFfprobePath(ffprobeInstaller.path);
-    isPathSet = true;
+    isFFmpegPathSet = true;
   } catch (e) {
     Logger.log(e);
   }
@@ -79,4 +79,4 @@ const runFFmpegCommand = (command: ffmpeg.FfmpegCommand) => {
   });
 };
 
-export { getMetadata, runFFmpegCommand, setFFPath };
+export { getMetadata, runFFmpegCommand, setDefaultFFPath };
