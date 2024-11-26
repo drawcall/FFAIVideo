@@ -20,12 +20,12 @@ const searchVideos = async (
   minDuration: number,
   config: VideoConfig,
 ): Promise<MaterialInfo[]> => {
-  const { videoAspect = VideoAspect.Portrait } = config;
+  const { videoAspect = VideoAspect.Portrait, perPage = 20 } = config;
   const videoOrientation: string = getEnumKeyByValue(VideoAspect, videoAspect);
   const [videoWidth, videoHeight] = toResolution(videoAspect);
   const searchData = {
     query: searchTerm,
-    per_page: '20',
+    per_page: perPage.toString(),
     orientation: videoOrientation.toLocaleLowerCase(),
   };
   const queryUrl = `https://api.pexels.com/videos/search`;
@@ -138,7 +138,7 @@ const downloadVideos = async (
   if (config.postProcessMaterialVideos) {
     materialVideos = config.postProcessMaterialVideos(materialVideos);
   }
-  
+
   const videoPaths: string[] = [];
   let totalDuration = 0.0;
   let index = 0;

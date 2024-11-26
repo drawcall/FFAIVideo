@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { ISubMaker } from './config/config';
 
 const formatter = (
   startTime: number,
@@ -20,7 +21,7 @@ const mktimestamp = (timeUnit: number): string => {
     .padStart(2, '0')}:${seconds.toFixed(3).padStart(6, '0')}`;
 };
 
-class SubMaker {
+class SubMaker implements ISubMaker {
   public offset: [number, number][];
   public subs: string[];
 

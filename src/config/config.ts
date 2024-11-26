@@ -38,6 +38,15 @@ interface SearchParams {
   cacheDir?: string;
 }
 
+// ISubMaker.ts
+export interface ISubMaker {
+  offset: [number, number][];
+  subs: string[];
+
+  createSub(timestamp: [number, number], text: string): void;
+  generateSubs(wordsInCue?: number): string;
+}
+
 interface VideoConfig {
   taskId?: string;
   provider?: string;
@@ -64,6 +73,7 @@ interface VideoConfig {
   azureTTSSettings?: AzureTTSSettings;
   lineSplit?: boolean;
   addPunctuation?: boolean;
+  perPage?: number;
 
   fontsDir?: string;
   fontSize?: number;
@@ -79,6 +89,11 @@ interface VideoConfig {
   ttsProxy?: string;
 
   getMaterial?: (param: SearchParams) => Promise<any[]>;
+  getTTS?: (
+    text: string,
+    voiceName: string,
+    voiceFile: string,
+  ) => Promise<Promise<ISubMaker | null>>;
   postProcessMaterialVideos?: (
     materialVideos: MaterialInfo[],
   ) => MaterialInfo[];
@@ -115,6 +130,7 @@ const defalutVideoConfig: VideoConfig = {
   fontSize: 24,
   strokeColor: '#000000',
   strokeWidth: 1,
+  perPage: 20,
   removeCache: true,
 };
 
