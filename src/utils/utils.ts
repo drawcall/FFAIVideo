@@ -74,6 +74,10 @@ const less = (a: number, b: number) => {
   return a < b;
 };
 
+const approxEq = (a: number, b: number): boolean => {
+  return Math.abs(a - b) < 650;
+};
+
 const convertHexToAssColor = (hexColor: string): string => {
   if (/^\&H00/g.test(hexColor)) return hexColor;
 
@@ -109,6 +113,7 @@ const getSampleItems = (items: any[], count: number) => {
 export {
   uuid,
   less,
+  approxEq,
   greater,
   insertTriplet,
   getSampleItems,

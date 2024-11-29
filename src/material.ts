@@ -55,7 +55,9 @@ const searchVideos = async (
     for (const file of videoFiles) {
       const w = parseInt(file['width']);
       const h = parseInt(file['height']);
-      if (less(w, videoWidth) || less(h, videoHeight)) continue;
+      if (less(w, videoWidth) && less(h, videoHeight)) continue;
+      //if (less(w, videoWidth) || less(h, videoHeight)) continue;
+      
       if (w < minWidth || h < minHeight) {
         minWidth = w;
         minHeight = h;
