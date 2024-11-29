@@ -20,13 +20,19 @@ const searchVideos = async (
   minDuration: number,
   config: VideoConfig,
 ): Promise<MaterialInfo[]> => {
-  const { videoAspect = VideoAspect.Portrait, perPage = 20 } = config;
+  const {
+    videoAspect = VideoAspect.Portrait,
+    perPage = 20,
+    materialAspectRatio = true,
+  } = config;
   const videoOrientation: string = getEnumKeyByValue(VideoAspect, videoAspect);
   const [videoWidth, videoHeight] = toResolution(videoAspect);
   const searchData = {
     query: searchTerm,
     per_page: perPage.toString(),
-    orientation: videoOrientation.toLocaleLowerCase(),
+    ...(materialAspectRatio && {
+      orientation: videoOrientation.toLocaleLowerCase(),
+    }),
   };
   const queryUrl = `https://api.pexels.com/videos/search`;
   const data = await httpGet(
@@ -41,7 +47,16 @@ const searchVideos = async (
     Logger.error(`search videos failed: ${JSON.stringify(data)}`);
     return videoItems;
   }
-  const videos = data['videos'];
+
+  let videos = data['videos'];
+  if (videos.length === 1 && config.preProcessMaterialVideo) {
+    videos = await config.preProcessMaterialVideo(
+      queryUrl,
+      searchData,
+      config.pexels!,
+    );
+  }
+
   for (const video of videos) {
     const duration = video['duration'];
     if (duration < minDuration) {
@@ -55,9 +70,12 @@ const searchVideos = async (
     for (const file of videoFiles) {
       const w = parseInt(file['width']);
       const h = parseInt(file['height']);
-      if (less(w, videoWidth) && less(h, videoHeight)) continue;
-      //if (less(w, videoWidth) || less(h, videoHeight)) continue;
-      
+      if (materialAspectRatio) {
+        if (less(w, videoWidth) || less(h, videoHeight)) continue;
+      } else {
+        if (less(w, videoWidth) && less(h, videoHeight)) continue;
+      }
+
       if (w < minWidth || h < minHeight) {
         minWidth = w;
         minHeight = h;

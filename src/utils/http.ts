@@ -52,4 +52,4 @@ const isNetUrl = (url: string) => {
   return /^(https?|ftp|file|ws|wss):\/\//.test(url);
 };
 
-export { httpGet, buildApiUrl, isNetUrl };
+export { httpGet, buildApiUrl, getAxiosConfig, isNetUrl };
