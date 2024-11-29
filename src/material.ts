@@ -49,7 +49,7 @@ const searchVideos = async (
   }
 
   let videos = data['videos'];
-  if (videos.length === 1 && config.preProcessMaterialVideo) {
+  if (videos.length <= 1 && config.preProcessMaterialVideo) {
     videos = await config.preProcessMaterialVideo(
       queryUrl,
       searchData,
