@@ -73,6 +73,7 @@ interface VideoConfig {
   azureTTSSettings?: AzureTTSSettings;
   lineSplit?: boolean;
   addPunctuation?: boolean;
+  isChinese?: boolean;
   perPage?: number;
 
   fontsDir?: string;
@@ -138,6 +139,7 @@ const defalutVideoConfig: VideoConfig = {
   strokeColor: '#000000',
   strokeWidth: 1,
   perPage: 20,
+  isChinese: true,
   removeCache: true,
 };
 

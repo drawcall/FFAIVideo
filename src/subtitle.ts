@@ -20,12 +20,14 @@ const generateSubtitle = async ({
   subtitleFile,
   subtitleMaxWidth,
   lineSplit,
+  isChinese,
 }: {
   subMaker: SubMaker;
   videoScript: string;
   subtitleFile: string;
   subtitleMaxWidth: number;
   lineSplit: boolean;
+  isChinese: boolean;
 }): Promise<void> => {
   const formattedSubtitles: string[] = [];
   let scriptLines = cleanSentences(
@@ -50,11 +52,17 @@ const generateSubtitle = async ({
     if (startTime < 0) startTime = starTime;
     endTime = enTime;
     subLine += safeDecodeURIComponent(sub);
+    if (!isChinese) {
+      subLine += ' ';
+    }
 
     // get equaled lineText
     let lineText = '';
     if (scriptLinesc.length > scriptLinesIndex) {
       const targetLine = scriptLinesc[scriptLinesIndex];
+      if (!isChinese) {
+        subLine = subLine.trim();
+      }
       lineText = getEqualedLine(targetLine, subLine);
     }
 

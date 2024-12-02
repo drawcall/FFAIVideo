@@ -29,11 +29,14 @@ const generateVideo = async (
     removeCache = true,
     lineSplit = true,
     addPunctuation = false,
+    isChinese = true,
     subtitleMaxWidth = 9999,
   } = config;
 
   Root.currentConfig = config;
-  videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
+  if (isChinese) {
+    videoScript = normalizeWhitespace(addPunctuationToParagraph(videoScript));
+  }
   if (addPunctuation) {
     videoScript = await addPunctuationWithAI(videoScript, config);
   }
@@ -82,6 +85,7 @@ const generateVideo = async (
     subtitleFile,
     subtitleMaxWidth,
     lineSplit,
+    isChinese
   });
   if (!fs.exists(subtitleFile)) {
     Logger.warn('subtitle file not found, fallback to whisper');
