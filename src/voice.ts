@@ -13,10 +13,10 @@ const tts = async (
   voiceFile: string,
   config: VideoConfig,
 ): Promise<SubMaker | null> => {
-  const { ttsProxy = '', azureTTSSettings, getTTS } = config;
+  const { ttsProxy = '', azureTTSSettings, genTTS } = config;
 
-  if (getTTS) {
-    return await getTTS(text, voiceName, voiceFile);
+  if (genTTS) {
+    return await genTTS(text, voiceName, voiceFile);
   }
   
   if (azureTTSSettings) {

@@ -91,11 +91,26 @@ interface VideoConfig {
   materialAspectRatio?: boolean;
 
   getMaterial?: (param: SearchParams) => Promise<any[]>;
-  getTTS?: (
+  genTTS?: (
     text: string,
     voiceName: string,
     voiceFile: string,
   ) => Promise<Promise<ISubMaker | null>>;
+  genTTSAndSub?: ({
+    text,
+    voiceName,
+    voiceFile,
+    subtitleFile,
+    subtitleMaxWidth,
+    lineBreakForce,
+  }: {
+    text: string;
+    voiceName: string;
+    voiceFile: string;
+    subtitleFile: string;
+    subtitleMaxWidth: number;
+    lineBreakForce: boolean;
+  }) => Promise<number>;
   preProcessMaterialVideo?: (
     queryUrl: string,
     searchData: Record<string, any>,

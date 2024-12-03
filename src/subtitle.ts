@@ -105,8 +105,7 @@ const restructureScriptLines = ({
     const sub = subMaker.subs[i];
     oldSubLine = subLine;
     subLine += `${sub}${isChinese ? '' : ' '}`;
-
-    console.log(i,sub);
+    
     if (TINY_PUNCTUATIONS.includes(sub)) {
       scriptLinesc.push(subLine);
       subLine = '';
