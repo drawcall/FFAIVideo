@@ -8,7 +8,6 @@ generateVideo(
     termsNum: 8,
     subtitleMaxWidth: 9,
     videoClipDuration: 10,
-    //ttsProxy: 'http:127.0.0.1:1080',
     voiceName: 'zh-CN-XiaoxiaoNeural',
     bgMusic: path.join(__dirname, './assets/songs/m3.mp3'),
     output: path.join(__dirname, './output'),

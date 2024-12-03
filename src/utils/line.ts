@@ -19,9 +19,19 @@ const isLineEqual = (lineText: string, subLine: string): boolean => {
 // const scriptLinesIndex = 1;
 // const subLine = "This is a test!";
 // output: "This is a test"
-const getEqualedLine = (targetLine: string, subLine: string): string => {
-  if (subLine === targetLine) {
-    return targetLine.trim();
+const getEqualedLine = (
+  targetLine: string,
+  subLine: string,
+  isChinese: boolean,
+): string => {
+  if (isChinese) {
+    if (subLine === targetLine) {
+      return targetLine.trim();
+    }
+  } else {
+    if (subLine.trim() === targetLine.trim()) {
+      return targetLine.trim();
+    }
   }
 
   const cleanedSubLine = removeSpecialCharacters(subLine);

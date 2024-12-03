@@ -37,33 +37,30 @@ const generateSubtitle = async ({
   let endTime = -1.0;
   let scriptLinesIndex = 0;
   let subLine = '';
-
   let scriptLinesc;
+
   if (lineSplit) {
-    scriptLinesc = restructureScriptLines(subMaker, subtitleMaxWidth);
+    scriptLinesc = restructureScriptLines({
+      subMaker,
+      subtitleMaxWidth,
+      isChinese,
+    });
   } else {
     scriptLinesc = clone(scriptLines);
   }
-  // console.log(scriptLinesc);
 
   for (let i = 0; i < subMaker.offset.length; i++) {
     let [offset, sub] = [subMaker.offset[i], subMaker.subs[i]];
     const [starTime, enTime] = offset;
     if (startTime < 0) startTime = starTime;
     endTime = enTime;
-    subLine += safeDecodeURIComponent(sub);
-    if (!isChinese) {
-      subLine += ' ';
-    }
+    subLine += `${safeDecodeURIComponent(sub)}${isChinese ? '' : ' '}`;
 
     // get equaled lineText
     let lineText = '';
     if (scriptLinesc.length > scriptLinesIndex) {
       const targetLine = scriptLinesc[scriptLinesIndex];
-      if (!isChinese) {
-        subLine = subLine.trim();
-      }
-      lineText = getEqualedLine(targetLine, subLine);
+      lineText = getEqualedLine(targetLine, subLine, isChinese);
     }
 
     // create new subtitle
@@ -91,10 +88,15 @@ const generateSubtitle = async ({
   await writeSubtitles(subtitleFile, formattedSubtitles, scriptLinesc.length);
 };
 
-const restructureScriptLines = (
-  subMaker: SubMaker,
-  subtitleMaxWidth: number,
-): string[] => {
+const restructureScriptLines = ({
+  subMaker,
+  subtitleMaxWidth,
+  isChinese,
+}: {
+  subMaker: SubMaker;
+  subtitleMaxWidth: number;
+  isChinese: boolean;
+}): string[] => {
   let scriptLinesc = [];
   let subLine = '';
   let oldSubLine = '';
@@ -102,8 +104,8 @@ const restructureScriptLines = (
   for (let i = 0; i < subMaker.offset.length; i++) {
     const sub = subMaker.subs[i];
     oldSubLine = subLine;
-    subLine += sub;
-
+    subLine += `${sub}${isChinese ? '' : ' '}`;
+    
     if (TINY_PUNCTUATIONS.includes(sub)) {
       scriptLinesc.push(subLine);
       subLine = '';
@@ -111,8 +113,12 @@ const restructureScriptLines = (
     }
 
     if (subLine.length > subtitleMaxWidth) {
-      scriptLinesc.push(oldSubLine);
-      subLine = sub;
+      if (!isChinese) {
+        scriptLinesc.push(oldSubLine.trim());
+      } else {
+        scriptLinesc.push(oldSubLine);
+      }
+      subLine = isChinese ? sub : `${sub} `;
       continue;
     }
   }
