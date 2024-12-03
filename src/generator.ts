@@ -27,7 +27,7 @@ const generateVideo = async (
     output = '',
     cacheDir = '',
     removeCache = true,
-    lineSplit = true,
+    lineBreakForce = true,
     addPunctuation = false,
     isChinese = true,
     subtitleMaxWidth = 9999,
@@ -84,7 +84,7 @@ const generateVideo = async (
     videoScript,
     subtitleFile,
     subtitleMaxWidth,
-    lineSplit,
+    lineBreakForce,
     isChinese
   });
   if (!fs.exists(subtitleFile)) {

@@ -19,14 +19,14 @@ const generateSubtitle = async ({
   videoScript,
   subtitleFile,
   subtitleMaxWidth,
-  lineSplit,
+  lineBreakForce,
   isChinese,
 }: {
   subMaker: SubMaker;
   videoScript: string;
   subtitleFile: string;
   subtitleMaxWidth: number;
-  lineSplit: boolean;
+  lineBreakForce: boolean;
   isChinese: boolean;
 }): Promise<void> => {
   const formattedSubtitles: string[] = [];
@@ -39,11 +39,12 @@ const generateSubtitle = async ({
   let subLine = '';
   let scriptLinesc;
 
-  if (lineSplit) {
+  if (lineBreakForce && isChinese) {
     scriptLinesc = restructureScriptLines({
       subMaker,
       subtitleMaxWidth,
       isChinese,
+      scriptLines,
     });
   } else {
     scriptLinesc = clone(scriptLines);
@@ -66,11 +67,8 @@ const generateSubtitle = async ({
     // create new subtitle
     if (lineText) {
       scriptLinesIndex++;
-      if (lineSplit) {
-        lineText = addLineBreaks(lineText, subtitleMaxWidth + 4);
-      } else {
-        lineText = addLineBreaks(lineText, subtitleMaxWidth);
-      }
+      const maxWidth = lineBreakForce ? subtitleMaxWidth + 4 : subtitleMaxWidth;
+      lineText = addLineBreaks(lineText, maxWidth);
       const subtitle = subtitleFormatter(
         scriptLinesIndex,
         startTime,
@@ -92,10 +90,12 @@ const restructureScriptLines = ({
   subMaker,
   subtitleMaxWidth,
   isChinese,
+  scriptLines,
 }: {
   subMaker: SubMaker;
   subtitleMaxWidth: number;
   isChinese: boolean;
+  scriptLines: string[];
 }): string[] => {
   let scriptLinesc = [];
   let subLine = '';
@@ -105,7 +105,8 @@ const restructureScriptLines = ({
     const sub = subMaker.subs[i];
     oldSubLine = subLine;
     subLine += `${sub}${isChinese ? '' : ' '}`;
-    
+
+    console.log(i,sub);
     if (TINY_PUNCTUATIONS.includes(sub)) {
       scriptLinesc.push(subLine);
       subLine = '';

@@ -7,7 +7,7 @@ generateVideo(
     provider: 'gpt4js',
     termsNum: 8,
     isChinese: false,
-    lineSplit: false,
+    lineBreakForce: false,
     subtitleMaxWidth: 20,
     videoClipDuration: 10,
     voiceName: 'zh-CN-XiaoxiaoNeural',

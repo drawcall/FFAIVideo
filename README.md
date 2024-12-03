@@ -118,7 +118,7 @@ Since FFAIVideo relies on FFmpeg for its functionality, it is essential that you
 | videoTerms | string \| string[] | - | Keywords for generating videos |
 | videoAspect | VideoAspect | undefined | Video aspect ratio, can be undefined by default |
 | videoClipDuration | number | 5 | Video clip duration, default is 5 seconds |
-| lineSplit | boolean | true | Use line breaks to split long subtitles |
+| lineBreakForce | boolean | true | Use line breaks to split long subtitles |
 | termsNum | number | 5 | Number of keywords |
 | output | string | - | Output path |
 | cacheDir | string | - | Cache directory |
