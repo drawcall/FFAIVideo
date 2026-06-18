@@ -1,9 +1,9 @@
 import path from 'path';
 import { merge } from 'lodash';
-import { LLMConfig, defaultLLMConfig } from './llm-config';
+import { LLMConfig, defaultLLMConfig } from './llm';
 import { VideoAspect } from './constant';
 import { isFilePath } from '../utils/file';
-import { uuid } from '../utils/utils';
+import { uuid } from '../utils/helpers';
 
 interface MaterialInfo {
   provider: string;
@@ -56,6 +56,8 @@ interface VideoConfig {
   gemini?: LLMConfig;
   g4f?: LLMConfig;
   gpt4js?: LLMConfig;
+  minimax?: LLMConfig;
+  glm?: LLMConfig;
   customAI?: LLMConfig;
   pexels?: MaterialSite;
   videoScript?: string; // Script used to generate video

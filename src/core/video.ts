@@ -1,10 +1,10 @@
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs-extra';
-import { VideoConfig } from './config/config';
-import { VideoAspect } from './config/constant';
-import { toResolution } from './config/video-aspect';
-import { getMetadata, runFFmpegCommand } from './utils/ffmpeg';
-import { createSubtitlesFilter } from './utils/filter';
+import { VideoConfig } from '../config/config';
+import { VideoAspect } from '../config/constant';
+import { toResolution } from '../config/video-aspect';
+import { getMetadata, runFFmpegCommand } from '../utils/ffmpeg';
+import { createSubtitlesFilter } from '../utils/filter';
 
 const combineFinalVideo = async (
   videoDuration: number,

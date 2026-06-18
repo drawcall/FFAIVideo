@@ -1,4 +1,4 @@
-import { convertHexToAssColor } from '../utils/utils';
+import { convertHexToAssColor } from './helpers';
 import { VideoConfig } from '../config/config';
 
 export function createSubtitlesFilter(

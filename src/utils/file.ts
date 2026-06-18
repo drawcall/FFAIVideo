@@ -2,7 +2,7 @@ import md5 from 'md5';
 import path from 'path';
 import fs from 'fs-extra';
 import { Stream } from 'stream';
-import { Logger } from '../utils/log';
+import { Logger } from './log';
 
 const isFilePath = (url: string): boolean => {
   const ext = path.extname(url);

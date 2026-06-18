@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { ISubMaker } from './config/config';
+import { ISubMaker } from '../config/config';
 
 const formatter = (
   startTime: number,

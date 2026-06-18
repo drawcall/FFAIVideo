@@ -1,7 +1,7 @@
-import { SubMaker } from './sub-maker';
-import { azureTTS } from './tts/azuretts';
-import { edgeTTS } from './tts/edgetts';
-import { VideoConfig } from './config/config';
+import { SubMaker } from '../subtitle/sub-maker';
+import { azureTTS } from '../tts/azure';
+import { edgeTTS } from '../tts/edge';
+import { VideoConfig } from '../config/config';
 
 const parseVoiceName = (name: string): string => {
   return name.replace('-Female', '').replace('-Male', '').trim();

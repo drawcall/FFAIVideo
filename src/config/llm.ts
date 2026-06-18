@@ -16,6 +16,8 @@ const defaultLLMConfig: {
   gemini: LLMConfig;
   g4f: LLMConfig;
   gpt4js: LLMConfig;
+  minimax: LLMConfig;
+  glm: LLMConfig;
   customAI: LLMConfig;
   defalut: LLMConfig;
   [key: string]: LLMConfig;
@@ -62,6 +64,20 @@ const defaultLLMConfig: {
     provider: "Nextway",
     modelName: 'gpt-4o-free',
     baseUrl: '***',
+  },
+
+  // minimax
+  minimax: {
+    apiKey: '',
+    modelName: 'abab6.5s-chat',
+    baseUrl: 'https://api.minimax.chat/v1',
+  },
+
+  // glm (智谱 ChatGLM)
+  glm: {
+    apiKey: '',
+    modelName: 'glm-4-flash',
+    baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
   },
 
   customAI: {

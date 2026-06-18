@@ -23,6 +23,8 @@ const getLLMConfig = (config: VideoConfig): LLMConfig => {
     gemini: config.gemini,
     g4f: config.g4f,
     gpt4js: config.gpt4js,
+    minimax: config.minimax,
+    glm: config.glm,
     custom: config.customAI,
   };
 

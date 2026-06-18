@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { MsEdgeTTS } from 'edge-tts-node';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import { SubMaker } from '../sub-maker';
+import { SubMaker } from '../subtitle/sub-maker';
 import { Logger } from '../utils/log';
 
 const edgeTTS = async (

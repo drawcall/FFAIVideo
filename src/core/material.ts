@@ -3,17 +3,17 @@ import md5 from 'md5';
 import path from 'path';
 import axios from 'axios';
 import { isEmpty } from 'lodash';
-import { VideoAspect } from './config/constant';
-import { VideoConfig, MaterialInfo } from './config/config';
-import { toResolution } from './config/video-aspect';
-import { getEnumKeyByValue } from './utils/utils';
-import { writeFileWithStream, copyLocalFile } from './utils/file';
-import { less } from './utils/utils';
-import { httpGet, buildApiUrl } from './utils/http';
-import { toJson } from './utils/json';
-import { Logger } from './utils/log';
-import { uuid, insertTriplet, getSampleItems } from './utils/utils';
-import { isNetUrl } from './utils/http';
+import { VideoAspect } from '../config/constant';
+import { VideoConfig, MaterialInfo } from '../config/config';
+import { toResolution } from '../config/video-aspect';
+import { getEnumKeyByValue } from '../utils/helpers';
+import { writeFileWithStream, copyLocalFile } from '../utils/file';
+import { less } from '../utils/helpers';
+import { httpGet, buildApiUrl } from '../utils/http';
+import { toJson } from '../utils/json';
+import { Logger } from '../utils/log';
+import { uuid, insertTriplet, getSampleItems } from '../utils/helpers';
+import { isNetUrl } from '../utils/http';
 
 const searchVideos = async (
   searchTerm: string,

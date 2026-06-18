@@ -1,18 +1,18 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { isEmpty, isArray } from 'lodash';
-import { Root } from './config/root';
-import { progressFun, successFun } from './config/constant';
-import { VideoConfig, mergeConfig, createOutputConfig } from './config/config';
+import { Root } from '../config/root';
+import { progressFun, successFun } from '../config/constant';
+import { VideoConfig, mergeConfig, createOutputConfig } from '../config/config';
 import { generateTermsWithAI, addPunctuationWithAI } from './terms';
 import { combineFinalVideo } from './video';
-import { fileToSubtitles } from './sub-maker';
+import { fileToSubtitles } from '../subtitle/sub-maker';
 import { generateSubtitle } from './subtitle';
 import { downloadVideos, copyClipToCache } from './material';
 import { tts, getAudioDuration, parseVoiceName } from './voice';
-import { addPunctuationToParagraph, normalizeWhitespace } from './utils/line';
-import { Logger } from './utils/log';
-import { setDefaultFFPath } from './utils/ffmpeg';
+import { addPunctuationToParagraph, normalizeWhitespace } from '../utils/string';
+import { Logger } from '../utils/log';
+import { setDefaultFFPath } from '../utils/ffmpeg';
 
 const generateVideo = async (
   params: VideoConfig,

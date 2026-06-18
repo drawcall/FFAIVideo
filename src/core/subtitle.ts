@@ -1,18 +1,16 @@
 import { clone } from 'lodash';
-import { SubMaker } from './sub-maker';
-import { subtitleFormatter } from './utils/date';
-import { TINY_PUNCTUATIONS } from './config/constant';
+import { SubMaker } from '../subtitle/sub-maker';
+import { subtitleFormatter } from '../utils/date';
+import { TINY_PUNCTUATIONS } from '../config/constant';
 import {
   addLineBreaks,
   normalizeWhitespace,
   safeDecodeURIComponent,
-} from './utils/char';
-import {
   getEqualedLine,
   cleanSentences,
   splitSubtitleByPunctuation,
-} from './utils/line';
-import { writeSubtitles } from './utils/file';
+} from '../utils/string';
+import { writeSubtitles } from '../utils/file';
 
 const generateSubtitle = async ({
   subMaker,

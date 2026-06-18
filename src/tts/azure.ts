@@ -1,6 +1,6 @@
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { Logger } from '../utils/log';
-import { SubMaker } from '../sub-maker';
+import { SubMaker } from '../subtitle/sub-maker';
 import { AzureTTSSettings } from '../config/config';
 
 const azureTTS = async (

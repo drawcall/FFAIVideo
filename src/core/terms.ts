@@ -1,6 +1,6 @@
-import { VideoConfig } from './config/config';
-import { Logger } from './utils/log';
-import { callAIInterface } from './ai/llm';
+import { VideoConfig } from '../config/config';
+import { Logger } from '../utils/log';
+import { callAIInterface } from '../ai/llm';
 
 const generateTermsWithAI = async (
   videoScript: string,
