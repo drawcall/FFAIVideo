@@ -1,4 +1,5 @@
 import ffmpeg from 'fluent-ffmpeg';
+import fs from 'fs-extra';
 import { VideoConfig } from './config/config';
 import { VideoAspect } from './config/constant';
 import { toResolution } from './config/video-aspect';
@@ -19,6 +20,36 @@ const combineFinalVideo = async (
     bgMusicVolume = 0.5,
     output,
   } = config;
+
+  // Pre-flight check: verify all input files exist before running ffmpeg
+  const missingFiles: string[] = [];
+  if (!fs.existsSync(audioFile)) {
+    missingFiles.push(`audioFile (TTS output): ${audioFile}`);
+  }
+  if (subtitleFile && !fs.existsSync(subtitleFile)) {
+    missingFiles.push(`subtitleFile: ${subtitleFile}`);
+  }
+  if (bgMusic && !fs.existsSync(bgMusic)) {
+    missingFiles.push(`bgMusic: ${bgMusic}`);
+  }
+  downloadedVideos.forEach((file, i) => {
+    if (!fs.existsSync(file)) {
+      missingFiles.push(`downloadedVideo[${i}]: ${file}`);
+    }
+  });
+  if (missingFiles.length > 0) {
+    throw new Error(
+      `combineFinalVideo: The following input files do not exist —\n` +
+      missingFiles.map(f => `  - ${f}`).join('\n') +
+      `\nThis will cause ffmpeg to fail with "No such file or directory". ` +
+      `Possible causes:\n` +
+      `  - TTS engine failed to generate audio (check network/proxy/ttsProxy)\n` +
+      `  - Video material download failed (check network/proxy)\n` +
+      `  - Cache directory was cleaned too early\n` +
+      `  - bgMusic path is incorrect`,
+    );
+  }
+
   const clips = await processingSubVideos(
     videoDuration,
     downloadedVideos,
@@ -33,16 +64,28 @@ const combineFinalVideo = async (
     command = command.addInput(file);
   });
   command.input(audioFile);
-  command.input(bgMusic);
-  command.input(subtitleFile);
+  if (bgMusic) {
+    command.input(bgMusic);
+  }
+  if (subtitleFile) {
+    command.input(subtitleFile);
+  }
 
+  const audioIdx = clips.length;
+  const bgMusicIdx = bgMusic ? clips.length + 1 : -1;
   const filters = [
     `${vfilter}concat=n=${clips.length}:v=1:a=0[v]`,
-    `[${clips.length}:a]volume=${voiceVolume}[audio]`,
-    `[${clips.length + 1}:a]volume=${bgMusicVolume}[bg]`,
-    `[audio][bg]amix=inputs=2[a]`,
-    createSubtitlesFilter(subtitleFile, config),
+    `[${audioIdx}:a]volume=${voiceVolume}[audio]`,
   ];
+  if (bgMusic) {
+    filters.push(`[${bgMusicIdx}:a]volume=${bgMusicVolume}[bg]`);
+    filters.push(`[audio][bg]amix=inputs=2[a]`);
+  } else {
+    filters.push(`[audio]anull[a]`);
+  }
+  if (subtitleFile) {
+    filters.push(createSubtitlesFilter(subtitleFile, config));
+  }
 
   command.outputOptions([
     '-filter_complex',

@@ -73,7 +73,24 @@ const runFFmpegCommand = (command: ffmpeg.FfmpegCommand) => {
         Logger.log('Cannot process video: ' + stdout);
         Logger.log('-----------------------------------');
         Logger.log(err.message, stderr);
-        reject(err);
+
+        // Enhance error message for common ffmpeg failures
+        if (err.message && err.message.includes('No such file or directory')) {
+          const enhancedMsg =
+            `${err.message}\n\n` +
+            `[FFAIVideo Diagnostic] ffmpeg failed because one or more input files do not exist.\n` +
+            `Full ffmpeg stderr: ${stderr || '(empty)'}\n` +
+            `Full ffmpeg stdout: ${stdout || '(empty)'}\n` +
+            `This typically means:\n` +
+            `  1. The audio file (TTS output) was not generated — check if edge TTS / Azure TTS succeeded.\n` +
+            `  2. Downloaded video clips are missing — check network/proxy when downloading materials.\n` +
+            `  3. A subtitle file path is invalid — check if subtitle generation completed.\n` +
+            `  4. The bgMusic file path does not exist.\n` +
+            `  5. The cache directory was cleaned prematurely (removeCache=true before ffmpeg finished).`;
+          reject(new Error(enhancedMsg));
+        } else {
+          reject(err);
+        }
       })
       .run();
   });
